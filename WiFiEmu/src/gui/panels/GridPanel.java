@@ -2,6 +2,7 @@ package gui.panels;
 
 import gui.GridCell;
 import helpers.EmuDataListener;
+import helpers.WiFiCalcUpdate;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+
 import data.Device;
 import data.DeviceType;
 import data.EmuData;
@@ -34,10 +36,12 @@ public class GridPanel
 	
 	private static final int CELL_TAKEN = -1;
 	private static final int SUCCESS = 0;
+	
 	private EmuData emuData;
 	private List<GridCell> grid;
 	private Point selectedCell = null;
 	private MouseAdapter mouseHandler = null;
+	private WiFiCalcUpdate wifiCalcUpdate;
 	
 	private int currentColumnCount;
 	private int currentRowCount;
@@ -49,6 +53,7 @@ public class GridPanel
     {
 	    super();
 	    initEmuData(emuData);
+	    wifiCalcUpdate = new WiFiCalcUpdate(emuData);
 //	    setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 	    setBackground(Color.WHITE);
     }
@@ -57,7 +62,6 @@ public class GridPanel
 	 */
     private void initEmuData(EmuData emuData)
     {
-//    	setEmuData(new EmuData());
     	setEmuData(emuData);
 	    setGrid(getEmuData().getGridColumnCount(), getEmuData().getGridRowCount());
 	    
@@ -123,6 +127,7 @@ public class GridPanel
     	{
         	device.setDeviceType(DeviceType.WIFI_STATION);
         	getEmuData().addWiFiStationReal(device);
+        	wifiCalcUpdate.update(device);
         	
         	repaint();
     	}
@@ -135,7 +140,8 @@ public class GridPanel
     	if (addImageOntoCell("res/person.jpg") != CELL_TAKEN)
     	{
         	device.setDeviceType(DeviceType.MOBILE);
-        	getEmuData().addWiFiStationReal(device);	
+        	getEmuData().addMobileDevice(device);	
+        	wifiCalcUpdate.update(device);
         	
         	repaint();
     	}
@@ -334,9 +340,13 @@ public class GridPanel
         }
         else if (e.getButton() == MouseEvent.BUTTON2)
         {
-        	removeDevice(device);                	
+        	removeDevice(device);            //does not work     	
         }
     }
+    
+    
+    
+    
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */

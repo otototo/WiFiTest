@@ -378,4 +378,22 @@ public class EmuData
 	    return names;
     }
 
+
+	/**
+	 * @return
+	 */
+    public int getMobileDevicesCount()
+    {
+	    return getMobileDevices().size();
+    }
+
+
+	/**
+	 * @return
+	 */
+    public int getWiFiStationsRealCount()
+    {
+	    return getWiFiStationsReal().size();
+    }
+
 }

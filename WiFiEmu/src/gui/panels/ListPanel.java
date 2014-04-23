@@ -4,10 +4,13 @@ import helpers.EmuDataListener;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListModel;
+
 import data.EmuData;
 
 /**
@@ -32,18 +35,24 @@ public class ListPanel extends JPanel implements EmuDataListener
     {
 	   	super();
 	   	setEmuData(emuData);
-	   	setLayout(new FlowLayout());
-//	   	setDataList1(new JList<String>(emuData.getMobileDevicesNames()));
-//	   	setDataList2(new JList<String>(emuData.getWiFiStationsRealNames()));
-	   	setDataList1(new JList<String>(myData));
+	   	setLayout(new GridLayout(2, 1));
+	   	setDataList1(new JList<String>(emuData.getMobileDevicesNames()));
+	   	setDataList2(new JList<String>(emuData.getWiFiStationsRealNames()));
+//	   	setDataList1(new JList<String>(myData));
 	   	mobileListModeler = dataList1.getModel();
 	   	
-	   	setDataList2(new JList<String>(myData));
+	   	
+//	   	setDataList2(new JList<String>(myData));
 	   	wifiListModeler = dataList2.getModel();
 	   	
-	   	dataList1.setFixedCellWidth(200);
-	   	add(dataList1);
-	   	add(dataList2);
+	   	JScrollPane scrollbar1 = new JScrollPane(dataList1);  /*neveikia*/
+	   	scrollbar1.setEnabled(true);
+	    add(scrollbar1); 
+//	   	add(dataList1);
+	   	JScrollPane scrollbar2 = new JScrollPane(dataList2);  /*neveikia*/
+	   	scrollbar2.setEnabled(true);
+	    add(scrollbar2); 
+//	   	add(dataList2);
 	   	setBackground(Color.WHITE);
     }
 	/**
