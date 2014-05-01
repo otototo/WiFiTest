@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -155,7 +156,6 @@ public class GridPanel
     	int ret = CELL_TAKEN;
     	int index = selectedCell.x + 
     			(selectedCell.y * getCurrentColumnCount());
-    	System.out.println(index);
     	GridCell cell = getGridCell(index);
     	if ((cell != null) && (cell.getImage() == null))
     	{
@@ -247,7 +247,7 @@ public class GridPanel
              {
             	 g2d.drawImage(cell.getImage(), cell.x+2, cell.y+2, 
          				cell.width-5, cell.height-5, null);
-         		cell.getImage().flush();
+         		 cell.getImage().flush();
              }
          }
          g2d.dispose();
@@ -316,7 +316,7 @@ public class GridPanel
     @Override
     public void onEmuDataChange(boolean isRealDataChange, ChangeIdentifier id)
     {
-    	if (id == ChangeIdentifier.SIZE)
+    	if ((id == ChangeIdentifier.SIZE) || (id == ChangeIdentifier.ALL))
     	{
         	int newColCount = getEmuData().getGridColumnCount();
         	int newRowCount = getEmuData().getGridRowCount();

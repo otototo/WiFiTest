@@ -40,17 +40,19 @@ public class ListPanel extends JPanel implements EmuDataListener
 	   	mobileNames = new DefaultListModel<String>();
 	   	JList<String> mobiles = new JList<String>();
 	   	mobiles.setModel(mobileNames);
+	   	
+	   	JScrollPane scrollbar1 = new JScrollPane(mobiles); 
+	   	scrollbar1.setEnabled(true);
+	    add(scrollbar1); 
 
 	   	wifiRealNames = new DefaultListModel<String>();
 	   	JList<String> wifis = new JList<String>();
 	   	wifis.setModel(wifiRealNames);	   	   	
 	   	
-	   	JScrollPane scrollbar1 = new JScrollPane(mobiles);  /*neveikia*/
-	   	scrollbar1.setEnabled(true);
-	    add(scrollbar1); 
-	   	JScrollPane scrollbar2 = new JScrollPane(wifis);  /*neveikia*/
+	   	JScrollPane scrollbar2 = new JScrollPane(wifis); 
 	   	scrollbar2.setEnabled(true);
 	    add(scrollbar2); 
+	    
 	   	setBackground(Color.WHITE);
     }
 	/**
@@ -73,30 +75,33 @@ public class ListPanel extends JPanel implements EmuDataListener
     @Override
     public void onEmuDataChange(boolean isRealDataChange, ChangeIdentifier id)
     {	    
-    	System.out.println("ListPanel.onEmuDataChange()+");
-    	System.out.println("id:"+id);
     	if ((id == ChangeIdentifier.WIFIR) || (id == ChangeIdentifier.ALL))
     	{
     		String[] wifir = emuData.getWiFiStationsRealNames();
-    		System.out.println("count="+emuData.getWiFiStationsRealCount());
-    		for (int i = 0; i < wifir.length; i++)
-    		{
-    			System.out.println("wifir="+wifir[i]);
-    			if (!wifiRealNames.contains(wifir[i]))
-    				wifiRealNames.addElement(wifir[i]);
-    		}
+    		changeListModeler(wifir, wifiRealNames);
     	}
     	if ((id == ChangeIdentifier.MOBILE) || (id == ChangeIdentifier.ALL))
     	{
     		String[] mobiles = emuData.getMobileDevicesNames();
-    		System.out.println("count="+emuData.getMobileDevicesCount());
-    		for (int i = 0; i < mobiles.length; i++)
-    		{
-    			System.out.println("mobiles="+mobiles[i]);
-    			if (!mobileNames.contains(mobiles[i]))
-    				mobileNames.addElement(mobiles[i]);
-    		}
+    		changeListModeler(mobiles, mobileNames);
     	}
-    	System.out.println("ListPanel.onEmuDataChange()-");
+    }
+    
+    public void changeListModeler(String[] data, DefaultListModel<String> model)
+    {
+		int count = data.length;
+		if ((count < 1) && (model.getSize() > 0))
+		{
+			model.clear();
+		}
+		else if (count > 0)
+		{
+    		for (int i = 0; i < data.length; i++)
+    		{
+    			System.out.println("data="+data[i]);
+    			if (!model.contains(data[i]))
+    				model.addElement(data[i]);
+    		}
+		}
     }
 }

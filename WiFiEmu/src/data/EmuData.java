@@ -338,6 +338,7 @@ public class EmuData
 		wiFiStationsCalculated.clear();
 		wiFiStationsReal.clear();
 		mobileDevices.clear();
+		notifier.notifyListeners(true, ChangeIdentifier.ALL);
 	}
 
 

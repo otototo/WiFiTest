@@ -46,12 +46,12 @@ public class MenuBar extends JMenuBar implements ActionListener
 	    addNew(menu);
 	    addSave(menu);
 	    addLoad(menu);
-	    addPreferences(menu);
+//	    addPreferences(menu);
 	    addExit(menu);
 	    
 	    setEmuData(emuData);
     	saveManager = new SaveManager(emuData);
-    	options = new OptionsFrame();
+    	options = new OptionsFrame(emuData);
     }
 
 	/**
@@ -128,14 +128,12 @@ public class MenuBar extends JMenuBar implements ActionListener
 	    }
 	    else if (e.getSource() == newSimulation)
 	    {
-	    	readPreferences(true);
-	    	emuData.reinit();
-	    }
-	    else if(e.getSource() == preferences)
-	    {
-//	    	readPreferences(false);
 	    	options.setVisible(true);
 	    }
+	   /* else if(e.getSource() == preferences)
+	    {
+	    	options.setVisible(true);
+	    }*/
 	    else if (e.getSource() == exit)
 	    {
             int confirm = JOptionPane.showOptionDialog(this,
@@ -147,27 +145,6 @@ public class MenuBar extends JMenuBar implements ActionListener
             }
 	    }
     }
-
-	/**
-	 * @param b
-	 */
-    private void readPreferences(boolean b)
-    {
-    	/*JTextField columnCount = new JTextField(EmuData.DEFAULT_COLUMN_COUNT);
-    	JTextField rowCount = new JTextField(EmuData.DEFAULT_ROW_COUNT);
-    	JTextField signalStrength = new JTextField(EmuData.DEFAULT_MAX_SIGNAL_STRENGTH);
-    	JTextField decreaseRate = new JTextField(EmuData.DEFAULT_SIGNAL_DECREASE_PER_CELL);
-    	
-    	JButton ok = new JButton("OK");
-    	JButton cancel = new JButton("Cancel");
-    	
-    	Object[] options = {cancel, ok, columnCount, rowCount, signalStrength, decreaseRate};
-	    JOptionPane.showOptionDialog(this, "hullo", "title",
-	    		JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION,
-	    		null, options, null);*/
-    	
-    }
-
 	/**
 	 * @return the emuData
 	 */
