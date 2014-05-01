@@ -22,14 +22,16 @@ import data.management.SaveManager;
  */
 public class MenuBar extends JMenuBar implements ActionListener
 {
-	JMenuItem newSimulation;
-	JMenuItem save;
-	JMenuItem load;
-	JMenuItem preferences;
-	JMenuItem exit;
+	private JMenuItem newSimulation;
+	private JMenuItem save;
+	private JMenuItem load;
+	private JMenuItem preferences;
+	private JMenuItem exit;
 	
 	private EmuData emuData;
 	private SaveManager saveManager;
+	
+	private OptionsFrame options;
 	
 	/**
 	 * @param emuData 
@@ -41,14 +43,15 @@ public class MenuBar extends JMenuBar implements ActionListener
 	    JMenu menu = new JMenu("Options");
 	    add(menu);
 	    
-//	    addNew(menu);
+	    addNew(menu);
 	    addSave(menu);
 	    addLoad(menu);
-//	    addPreferences(menu);
+	    addPreferences(menu);
 	    addExit(menu);
 	    
 	    setEmuData(emuData);
     	saveManager = new SaveManager(emuData);
+    	options = new OptionsFrame();
     }
 
 	/**
@@ -130,7 +133,8 @@ public class MenuBar extends JMenuBar implements ActionListener
 	    }
 	    else if(e.getSource() == preferences)
 	    {
-	    	readPreferences(false);
+//	    	readPreferences(false);
+	    	options.setVisible(true);
 	    }
 	    else if (e.getSource() == exit)
 	    {

@@ -1,6 +1,7 @@
 package gui.panels;
 
 import gui.GridCell;
+import helpers.ChangeIdentifier;
 import helpers.EmuDataListener;
 import helpers.WiFiCalcUpdate;
 
@@ -105,7 +106,7 @@ public class GridPanel
     	int index = getEmuData().getWiFiStationRealIndex(device);
     	if (index != -1)
     	{
-        	getEmuData().removeWiFiStation(index);
+        	getEmuData().removeWiFiStation(index, true);
     	}
     	else
     	{
@@ -113,7 +114,7 @@ public class GridPanel
     		index = getEmuData().getMobileDeviceIndex(device);
     		if (index != -1)
     		{
-            	getEmuData().removeMobile(index);
+            	getEmuData().removeMobile(index, true);
     		}
         }
     	
@@ -126,10 +127,10 @@ public class GridPanel
     	if (addImageOntoCell("res/wifi.png") != CELL_TAKEN)
     	{
         	device.setDeviceType(DeviceType.WIFI_STATION);
-        	getEmuData().addWiFiStationReal(device);
+        	getEmuData().addWiFiStationReal(device, true);
         	wifiCalcUpdate.update(device);
         	
-        	repaint();
+//        	repaint();
     	}
     }
 	/**
@@ -140,10 +141,10 @@ public class GridPanel
     	if (addImageOntoCell("res/person.jpg") != CELL_TAKEN)
     	{
         	device.setDeviceType(DeviceType.MOBILE);
-        	getEmuData().addMobileDevice(device);	
+        	getEmuData().addMobileDevice(device, true);	
         	wifiCalcUpdate.update(device);
         	
-        	repaint();
+//        	repaint();
     	}
     }
 	/**
@@ -313,11 +314,14 @@ public class GridPanel
 	 * TODO: change so if new selected grid is created a new. Changing size mid-work is pointless
 	 */
     @Override
-    public void onEmuDataChange(boolean isRealDataChange)
+    public void onEmuDataChange(boolean isRealDataChange, ChangeIdentifier id)
     {
-    	int newColCount = getEmuData().getGridColumnCount();
-    	int newRowCount = getEmuData().getGridRowCount();
-   		setGrid(newColCount, newRowCount);
+    	if (id == ChangeIdentifier.SIZE)
+    	{
+        	int newColCount = getEmuData().getGridColumnCount();
+        	int newRowCount = getEmuData().getGridRowCount();
+       		setGrid(newColCount, newRowCount);
+    	}
    		repaint();
     }
 	/* (non-Javadoc)

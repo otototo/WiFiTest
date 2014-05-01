@@ -3,6 +3,8 @@
  */
 package gui;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,7 +25,8 @@ public class OptionsFrame extends JFrame
 	    
 	    
 	    
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    setVisible(true);
+	    setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	    setVisible(false);
+	    setMinimumSize(new Dimension(400, 100));
     }
 }

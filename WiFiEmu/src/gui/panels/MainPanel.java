@@ -41,6 +41,7 @@ public class MainPanel extends JPanel
 	    
 	    listPanel = new ListPanel(emuData);
 	    add(listPanel, BorderLayout.LINE_END);
+	    notifier.addListener(listPanel);
 	    
 //	    JScrollPane scrollbar = new JScrollPane(gridPanel);  /*neveikia*/
 //	    add(scrollbar, BorderLayout.CENTER);  

@@ -77,8 +77,8 @@ public class Loader
 			   );
 	    String values[] = temp.split("x");
 	    
-	    emuData.setGridColumnCount(Integer.parseInt(values[0]));
-	    emuData.setGridRowCount(Integer.parseInt(values[1]));
+	    emuData.setGridColumnCount(Integer.parseInt(values[0]), false);
+	    emuData.setGridRowCount(Integer.parseInt(values[1]), false);
     }
 
 	/**
@@ -90,7 +90,7 @@ public class Loader
 	    		properties.getProperty(
 	    				SaveFormat.SIGNAL_STRENGTH.getValue()
 	    				)
-	    		));
+	    		), false);
     }
 
 	/**
@@ -102,6 +102,6 @@ public class Loader
     		properties.getProperty(
     				SaveFormat.DECREASE_PER_CELL.getValue()
     				)
-    		));
+    		), false);
     }
 }

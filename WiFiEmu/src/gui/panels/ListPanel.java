@@ -1,15 +1,16 @@
 package gui.panels;
 
+import helpers.ChangeIdentifier;
 import helpers.EmuDataListener;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 
 import data.EmuData;
 
@@ -22,11 +23,10 @@ public class ListPanel extends JPanel implements EmuDataListener
 {
 	private EmuData emuData;
 	private String myData[] = {"<Empty>"};
-	private JList<String> dataList1;
-	private JList<String> dataList2;
 	
-	private ListModel<String> mobileListModeler;
-	private ListModel<String> wifiListModeler;
+	private DefaultListModel<String> mobileNames;
+	private DefaultListModel<String> wifiRealNames;
+	
 	/**
 	 * @param emuData 
      * 
@@ -36,23 +36,21 @@ public class ListPanel extends JPanel implements EmuDataListener
 	   	super();
 	   	setEmuData(emuData);
 	   	setLayout(new GridLayout(2, 1));
-	   	setDataList1(new JList<String>(emuData.getMobileDevicesNames()));
-	   	setDataList2(new JList<String>(emuData.getWiFiStationsRealNames()));
-//	   	setDataList1(new JList<String>(myData));
-	   	mobileListModeler = dataList1.getModel();
 	   	
+	   	mobileNames = new DefaultListModel<String>();
+	   	JList<String> mobiles = new JList<String>();
+	   	mobiles.setModel(mobileNames);
+
+	   	wifiRealNames = new DefaultListModel<String>();
+	   	JList<String> wifis = new JList<String>();
+	   	wifis.setModel(wifiRealNames);	   	   	
 	   	
-//	   	setDataList2(new JList<String>(myData));
-	   	wifiListModeler = dataList2.getModel();
-	   	
-	   	JScrollPane scrollbar1 = new JScrollPane(dataList1);  /*neveikia*/
+	   	JScrollPane scrollbar1 = new JScrollPane(mobiles);  /*neveikia*/
 	   	scrollbar1.setEnabled(true);
 	    add(scrollbar1); 
-//	   	add(dataList1);
-	   	JScrollPane scrollbar2 = new JScrollPane(dataList2);  /*neveikia*/
+	   	JScrollPane scrollbar2 = new JScrollPane(wifis);  /*neveikia*/
 	   	scrollbar2.setEnabled(true);
 	    add(scrollbar2); 
-//	   	add(dataList2);
 	   	setBackground(Color.WHITE);
     }
 	/**
@@ -69,40 +67,36 @@ public class ListPanel extends JPanel implements EmuDataListener
     {
 	    this.emuData = emuData;
     }
-	/**
-	 * @return the dataList2
-	 */
-    public JList<String> getDataList2()
-    {
-	    return dataList2;
-    }
-	/**
-	 * @param jList the dataList2 to set
-	 */
-    public void setDataList2(JList<String> jList)
-    {
-	    this.dataList2 = jList;
-    }
-	/**
-	 * @return the dataList1
-	 */
-    public JList<String> getDataList1()
-    {
-	    return dataList1;
-    }
-	/**
-	 * @param dataList1 the dataList1 to set
-	 */
-    public void setDataList1(JList<String> dataList1)
-    {
-	    this.dataList1 = dataList1;
-    }
 	/* (non-Javadoc)
 	 * @see helpers.EmuDataListener#onEmuDataChange()
 	 */
     @Override
-    public void onEmuDataChange(boolean isRealDataChange)
+    public void onEmuDataChange(boolean isRealDataChange, ChangeIdentifier id)
     {	    
-//    	repaint();
+    	System.out.println("ListPanel.onEmuDataChange()+");
+    	System.out.println("id:"+id);
+    	if ((id == ChangeIdentifier.WIFIR) || (id == ChangeIdentifier.ALL))
+    	{
+    		String[] wifir = emuData.getWiFiStationsRealNames();
+    		System.out.println("count="+emuData.getWiFiStationsRealCount());
+    		for (int i = 0; i < wifir.length; i++)
+    		{
+    			System.out.println("wifir="+wifir[i]);
+    			if (!wifiRealNames.contains(wifir[i]))
+    				wifiRealNames.addElement(wifir[i]);
+    		}
+    	}
+    	if ((id == ChangeIdentifier.MOBILE) || (id == ChangeIdentifier.ALL))
+    	{
+    		String[] mobiles = emuData.getMobileDevicesNames();
+    		System.out.println("count="+emuData.getMobileDevicesCount());
+    		for (int i = 0; i < mobiles.length; i++)
+    		{
+    			System.out.println("mobiles="+mobiles[i]);
+    			if (!mobileNames.contains(mobiles[i]))
+    				mobileNames.addElement(mobiles[i]);
+    		}
+    	}
+    	System.out.println("ListPanel.onEmuDataChange()-");
     }
 }

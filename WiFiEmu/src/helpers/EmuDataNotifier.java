@@ -30,11 +30,11 @@ public class EmuDataNotifier
 	    this.listeners.add(listener);
     }
 	
-    public void notifyListeners(boolean realDataChange)
+    public void notifyListeners(boolean realDataChange, ChangeIdentifier id)
     {
     	for (EmuDataListener listener : listeners)
     	{
-    		listener.onEmuDataChange(realDataChange);
+    		listener.onEmuDataChange(realDataChange, id);
     	}
     }
 

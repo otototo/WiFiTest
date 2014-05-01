@@ -121,22 +121,22 @@ public class TopPanel extends JPanel implements DocumentListener, ActionListener
 	    {
 	    	int columnCount = getInt(columnCountText);
 	    	if (columnCount != -1)
-	    		getTempEmuData().setGridColumnCount(columnCount);
+	    		getTempEmuData().setGridColumnCount(columnCount, false);
 	    }
     	else if (e.getDocument().equals(rowCountText.getDocument()))
 	    {
 	    	int rowCount = getInt(rowCountText);
-	    	getTempEmuData().setGridRowCount(rowCount);
+	    	getTempEmuData().setGridRowCount(rowCount, false);
 	    }
 	    else if (e.getDocument().equals(maxStrengthText.getDocument()))
 	    {
 	    	int strength = getInt(maxStrengthText);
-	    	getTempEmuData().setStationStrength(strength);
+	    	getTempEmuData().setStationStrength(strength, false);
 	    }
 	    else if (e.getDocument().equals(decreaseText.getDocument()))
 	    {
 	    	int decrease = getInt(decreaseText);
-	    	getTempEmuData().setDecreasePerCell(decrease);
+	    	getTempEmuData().setDecreasePerCell(decrease, false);
 	    }
     	
     	if ((getTempEmuData().getGridColumnCount() > EmuData.DEFAULT_MAX_GRID_COUNT) ||

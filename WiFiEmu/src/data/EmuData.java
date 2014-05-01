@@ -3,6 +3,7 @@
  */
 package data;
 
+import helpers.ChangeIdentifier;
 import helpers.EmuDataNotifier;
 
 import java.util.ArrayList;
@@ -53,20 +54,20 @@ public class EmuData
 	    wiFiStationsCalculated = new ArrayList<Device>();
 	    wiFiStationsReal = new ArrayList<Device>();	    
 
-    	setGridColumnCount(DEFAULT_COLUMN_COUNT);
-    	setGridRowCount(DEFAULT_ROW_COUNT);
-    	setDecreasePerCell(DEFAULT_SIGNAL_DECREASE_PER_CELL);
-    	setStationStrength(DEFAULT_MAX_SIGNAL_STRENGTH);
+    	setGridColumnCount(DEFAULT_COLUMN_COUNT, false);
+    	setGridRowCount(DEFAULT_ROW_COUNT, false);
+    	setDecreasePerCell(DEFAULT_SIGNAL_DECREASE_PER_CELL, false);
+    	setStationStrength(DEFAULT_MAX_SIGNAL_STRENGTH, false);
     }
 
     public void reinit()
     {
     	clear();
 
-    	setGridColumnCount(DEFAULT_COLUMN_COUNT);
-    	setGridRowCount(DEFAULT_ROW_COUNT);
-    	setDecreasePerCell(DEFAULT_SIGNAL_DECREASE_PER_CELL);
-    	setStationStrength(DEFAULT_MAX_SIGNAL_STRENGTH);    	
+    	setGridColumnCount(DEFAULT_COLUMN_COUNT, false);
+    	setGridRowCount(DEFAULT_ROW_COUNT, false);
+    	setDecreasePerCell(DEFAULT_SIGNAL_DECREASE_PER_CELL, false);
+    	setStationStrength(DEFAULT_MAX_SIGNAL_STRENGTH, false);    	
     }
     
 	/**
@@ -79,9 +80,11 @@ public class EmuData
 	/**
 	 * @param gridRowCount the gridRowCount to set
 	 */
-    public void setGridRowCount(int gridRowCount)
+    public void setGridRowCount(int gridRowCount, boolean notify)
     {
 		this.gridRowCount = gridRowCount;
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.SIZE);
     }
 	/**
 	 * @return the gridColumnCount
@@ -93,9 +96,11 @@ public class EmuData
 	/**
 	 * @param gridColumnCount the gridColumnCount to set
 	 */
-    public void setGridColumnCount(int gridColumnCount)
+    public void setGridColumnCount(int gridColumnCount, boolean notify)
     {
 		this.gridColumnCount = gridColumnCount;
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.SIZE);
     }
 	/**
 	 * @return the decreasePerCell
@@ -107,9 +112,11 @@ public class EmuData
 	/**
 	 * @param decreasePerCell the decreasePerCell to set
 	 */
-    public void setDecreasePerCell(int decreasePerCell)
+    public void setDecreasePerCell(int decreasePerCell, boolean notify)
     {
 	    this.decreasePerCell = decreasePerCell;
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.DECREASE);
     }
 	/**
 	 * @return the stationStrength
@@ -121,9 +128,11 @@ public class EmuData
 	/**
 	 * @param stationStrength the stationStrength to set
 	 */
-    public void setStationStrength(int stationStrength)
+    public void setStationStrength(int stationStrength, boolean notify)
     {
 	    this.stationStrength = stationStrength;
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.STRENGTH);
     }
 	/**
 	 * @return the devices
@@ -142,16 +151,20 @@ public class EmuData
 	/**
 	 * @param mobileDevices the devices to set
 	 */
-    public void setMobileDevice(Device device, int i)
+    public void setMobileDevice(Device device, int i, boolean notify)
     {
 	    mobileDevices.set(i, device);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
     }
     /**
 	 * @param mobileDevices the devices to add
 	 */
-    public void addMobileDevice(Device device)
+    public void addMobileDevice(Device device, boolean notify)
     {
 	    mobileDevices.add(device);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
     } 
 
 
@@ -181,9 +194,11 @@ public class EmuData
 	/**
 	 * @param index
 	 */
-    public void removeMobile(int index)
+    public void removeMobile(int index, boolean notify)
     {
 	    mobileDevices.remove(index);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
     }
 
 	/**
@@ -204,16 +219,20 @@ public class EmuData
 	/**
 	 * @param wiFiStationCalculated the wiFiStationCalculated to set
 	 */
-    public void setWiFiStationCalculated(Device wiFiStationCalculated, int i)
+    public void setWiFiStationCalculated(Device wiFiStationCalculated, int i, boolean notify)
     {
 	    this.wiFiStationsCalculated.set(i, wiFiStationCalculated);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.WIFIC);
 	}
     /**
 	 * @param wiFiStationCalculated the wiFiStationCalculated to add
 	 */
-    public void addWiFiStationCalculated(Device wiFiStationCalculated)
+    public void addWiFiStationCalculated(Device wiFiStationCalculated, boolean notify)
     {
 	    this.wiFiStationsCalculated.add(wiFiStationCalculated);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.WIFIC);
 	}
 	/**
 	 * @return the wiFiStationsReal
@@ -232,16 +251,20 @@ public class EmuData
 	/**
 	 * @param wiFiStationReal the wiFiStationReal to set
 	 */
-    public void setWiFiStationReal(Device wiFiStationReal, int i)
+    public void setWiFiStationReal(Device wiFiStationReal, int i, boolean notify)
     {
 	    this.wiFiStationsReal.set(i, wiFiStationReal);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.WIFIR);
 	}	
 	/**
 	 * @param wiFiStationReal the wiFiStationReal to add
 	 */
-    public void addWiFiStationReal(Device wiFiStationReal)
+    public void addWiFiStationReal(Device wiFiStationReal, boolean notify)
     {
 	    this.wiFiStationsReal.add(wiFiStationReal);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.WIFIR);
 	}
 
     public int getWiFiStationRealIndex(Device station)
@@ -261,7 +284,7 @@ public class EmuData
     	return index;
     }
 
-    public int RemoveWiFiStation(Device station)
+    public int RemoveWiFiStation(Device station, boolean notify)
     {
     	int index = -1;
     	Device device;
@@ -275,6 +298,9 @@ public class EmuData
     			break;
 			}
     	}
+
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.WIFIR);
     	return index;
     }
 
@@ -299,10 +325,12 @@ public class EmuData
 	/**
 	 * 
 	 */
-    public void removeWiFiStation(int index)
+    public void removeWiFiStation(int index, boolean notify)
     {
 	    wiFiStationsCalculated.remove(index);
 	    wiFiStationsReal.remove(index);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
     }	
 	
 	public void clear()
@@ -329,7 +357,7 @@ public class EmuData
     {
 	    this.justLoaded = justLoaded;
 	    if (notifier != null)
-	    	notifier.notifyListeners(realDataChange);
+	    	notifier.notifyListeners(realDataChange, ChangeIdentifier.ALL);
     }
 
 
@@ -338,10 +366,10 @@ public class EmuData
 	 */
     public void copySingularData(EmuData tempEmuData)
     {
-	    this.setDecreasePerCell(tempEmuData.getDecreasePerCell());
-	    this.setGridColumnCount(tempEmuData.getGridColumnCount());
-	    this.setGridRowCount(tempEmuData.getGridRowCount());
-	    this.setStationStrength(tempEmuData.getStationStrength());
+	    this.setDecreasePerCell(tempEmuData.getDecreasePerCell(), false);
+	    this.setGridColumnCount(tempEmuData.getGridColumnCount(), false);
+	    this.setGridRowCount(tempEmuData.getGridRowCount(), false);
+	    this.setStationStrength(tempEmuData.getStationStrength(), false);
     }
 
 

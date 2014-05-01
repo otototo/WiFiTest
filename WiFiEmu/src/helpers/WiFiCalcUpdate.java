@@ -45,7 +45,18 @@ public class WiFiCalcUpdate
 	    {
 	    	updateStations(device);
 	    }
+	    recalculateWiFiPostition();
 	    System.out.println("WiFiCalcUpdate.update()-");
+    }
+
+
+	/**
+	 * 
+	 */
+    private void recalculateWiFiPostition()
+    {
+	    System.out.println("WiFiCalcUpdate.recalculateWiFiPostition()+");
+	    System.out.println("WiFiCalcUpdate.recalculateWiFiPostition()-");
     }
 
 
