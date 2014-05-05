@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gui;
+package gui.grid;
 
 import java.awt.Image;
 import java.awt.Rectangle;

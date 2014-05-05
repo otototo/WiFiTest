@@ -9,5 +9,5 @@ package helpers;
  */
 public enum ChangeIdentifier
 {
-	WIFIR, WIFIC, MOBILE, SIZE, DECREASE, ALL, STRENGTH; 
+	WIFIR, WIFIC, MOBILE, SIZE, DECREASE, ALL, STRENGTH, VIEW; 
 }

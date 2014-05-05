@@ -35,6 +35,8 @@ public class EmuData
 	private Device selectedDevice;
 	private boolean justLoaded = false;
 	
+	private boolean realView = true; //if false calculated position are shown 
+	
 	/**
      * 
      */
@@ -423,6 +425,27 @@ public class EmuData
     public int getWiFiStationsRealCount()
     {
 	    return getWiFiStationsReal().size();
+    }
+
+
+	/**
+	 * @return the realView
+	 */
+    public boolean isRealView()
+    {
+	    return realView;
+    }
+
+
+	/**
+	 * @param realView the realView to set
+	 */
+    public void setRealView(boolean realView)
+    {
+    	System.out.println("realView="+realView);
+	    this.realView = realView;
+	    if (notifier != null)
+	    	notifier.notifyListeners(false, ChangeIdentifier.VIEW);
     }
 
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gui;
+package gui.grid;
 
 import java.awt.Color;
 import java.awt.Image;

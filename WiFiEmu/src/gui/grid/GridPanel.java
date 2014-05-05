@@ -1,6 +1,5 @@
-package gui.panels;
+package gui.grid;
 
-import gui.GridCell;
 import helpers.ChangeIdentifier;
 import helpers.EmuDataListener;
 import helpers.WiFiCalcUpdate;
@@ -9,7 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Paint;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -218,42 +217,52 @@ public class GridPanel
                     grid.add(cell);
                 }
             }
-        }
-         
-   /*      if (selectedCell != null) 
-         {
-             int index = selectedCell.x + (selectedCell.y * columnCount);
-             GridCell cell = getGridCell(index);
-             g2d.setColor(Color.GRAY);
-             g2d.fill(cell);
-         	Image img;
-             try
-             {
-                 img = ImageIO.read(new File("res/wifi.png"));
-         		g.drawImage(img, cell.x, cell.y, cell.width, cell.height, null);
-                 img.flush();
-             } catch (IOException e)
-             {
-                 // TODO Auto-generated catch block
-                 e.printStackTrace();
-             }
-
-         }*/
-         g2d.setColor(Color.BLACK);
-         for (GridCell cell : grid) 
-         {
-             g2d.draw(cell);
-             if (cell.getImage() != null)
-             {
-            	 g2d.drawImage(cell.getImage(), cell.x+2, cell.y+2, 
-         				cell.width-5, cell.height-5, null);
-         		 cell.getImage().flush();
-             }
          }
+         drawCells(g2d);
+         
          g2d.dispose();
     }
 
-    @Override
+    /**
+	 * @param g2d
+	 */
+    private void drawCells(Graphics2D g2d)
+    {
+    	Image cellImg;
+        g2d.setColor(Color.BLACK);
+        for (GridCell cell : grid) 
+        {
+            g2d.draw(cell);
+            if (cell.getImage() != null)
+            {
+            	cellImg = cell.getImage();
+            	if (emuData.isRealView() && 
+            			(cellImg != GridCellType.WIFI_CALC.getImage())
+            		)
+            	{
+               	 	drawImage(g2d, cell, cellImg);
+            	}
+            	else if (!emuData.isRealView() &&
+            			(cellImg == GridCellType.WIFI_CALC.getImage())
+            		)
+            	{
+               	 	drawImage(g2d, cell, cellImg);
+            	}
+            }
+        }
+    }
+	/**
+	 * @param g2d
+	 * @param cell
+	 * @param cellImg
+	 */
+    private void drawImage(Graphics2D g2d, GridCell cell, Image cellImg)
+    {
+    	g2d.drawImage(cellImg, cell.x+2, cell.y+2, 
+				cell.width-5, cell.height-5, null);
+		cell.getImage().flush();	    
+    }
+	@Override
     public Dimension getPreferredSize() {
         return new Dimension(200, 200);
     }
@@ -330,22 +339,24 @@ public class GridPanel
     @Override
     public void mouseClicked(MouseEvent e)
     {
-    	System.out.println("MouseClicked");
-    	System.out.println("event:"+e);
-    	Device device = new Device(DeviceType.WIFI_STATION, 
-    			selectedCell.x, selectedCell.y);
-        if (e.getButton() == MouseEvent.BUTTON1)
-        {
-        	addMobileDevice(device);
-        }
-        else if (e.getButton() == MouseEvent.BUTTON3)
-        {
-        	addWiFiStation(device);
-        }
-        else if (e.getButton() == MouseEvent.BUTTON2)
-        {
-        	removeDevice(device);            //does not work     	
-        }
+    	System.out.println("mouseClicked.realView:"+emuData.isRealView());
+    	if (emuData.isRealView())
+    	{
+        	Device device = new Device(DeviceType.WIFI_STATION, 
+        			selectedCell.x, selectedCell.y);
+            if (e.getButton() == MouseEvent.BUTTON1)
+            {
+            	addMobileDevice(device);
+            }
+            else if (e.getButton() == MouseEvent.BUTTON3)
+            {
+            	addWiFiStation(device);
+            }
+            else if (e.getButton() == MouseEvent.BUTTON2)
+            {
+            	removeDevice(device);            //does not work     	
+            }
+    	}
     }
     
     

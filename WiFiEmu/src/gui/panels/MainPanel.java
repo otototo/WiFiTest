@@ -3,6 +3,7 @@
  */
 package gui.panels;
 
+import gui.grid.GridPanel;
 import helpers.EmuDataNotifier;
 
 import java.awt.BorderLayout;
