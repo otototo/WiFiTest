@@ -1,6 +1,9 @@
-import lmath.data.Complex;
+import data.Device;
+import data.DeviceType;
+import data.EmuData;
 import algorithm.WiFiPositionCalc;
 import gui.MainFrame;
+import helpers.WiFiCalcUpdate;
 
 /**
  * 
@@ -16,30 +19,41 @@ public class Main
     {
 	    new MainFrame();
 //		testMatrixSystemSolution();
+//		testWifiPositionCalc();
     }
 
 	/**
 	 * 
 	 */
-    private static void testMatrixSystemSolution()
+    private static void testWifiPositionCalc()
     {
-    	//x=2, y=3
-		double[][] coeff = 
-		{
-				{5, -3},
-				{2, 5}
-		};
-		double[] freem = 
-			{
-				1,
-				19
-			};
-		WiFiPositionCalc calc = new WiFiPositionCalc();
-		calc.calculate(coeff, freem);
-		System.out.println("result:");
-		for (Complex d : calc.getResult().getData())
-		{
-			System.out.print(d.getReal()+" ");
-		}
+    	EmuData emuData = new EmuData(null);
+    	
+    	Device mobile1 = new Device(DeviceType.MOBILE, 5, -3);
+    	emuData.addMobileDevice(mobile1, false);
+    	
+    	Device mobile2 = new Device(DeviceType.MOBILE, 2, 5);
+    	emuData.addMobileDevice(mobile2, false);
+    	
+    	Device mobile3 = new Device(DeviceType.MOBILE, 1, 4);
+    	emuData.addMobileDevice(mobile3, false);
+    	
+    	Device station = new Device(DeviceType.WIFI_STATION, 0, 0);
+    	emuData.addWiFiStationReal(station, false);
+    	
+    	mobile1.addSignalStrength(station.getId(), 1);
+    	mobile2.addSignalStrength(station.getId(), 19);
+    	mobile3.addSignalStrength(station.getId(), 23);
+    	
+	    WiFiCalcUpdate calc = new WiFiCalcUpdate(emuData);
+	    calc.calculateWiFiPostitions();
+	    
+	    for (Device calculated : emuData.getWiFiStationsCalculated())
+	    {
+	    	System.out.println("device:"+calculated.getId()+
+	    			" ["+calculated.getX()+","+calculated.getY()+"]");
+	    }
     }
+
+	
 }

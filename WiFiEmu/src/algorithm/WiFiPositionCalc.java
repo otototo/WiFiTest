@@ -3,15 +3,6 @@
  */
 package algorithm;
 
-import java.util.List;
-
-import lmath.data.Matrix;
-import lmath.data.Series;
-import lmath.data.impl.MatrixImpl;
-import lmath.data.impl.SeriesImpl;
-import lmath.equation.SolverFactory;
-import data.Device;
-import data.EmuData;
 
 
 
@@ -21,117 +12,68 @@ import data.EmuData;
  */
 public class WiFiPositionCalc
 {
-	private static final int COORDINATE_COUNT = 2;
-	
-	private EmuData emuData;
-//	private SimpleMatrix matrix;
-	private Matrix coefficients;
-	private Series freemembers;
-
-	private Series result;
-	/**
-     * 
-     */
-    public WiFiPositionCalc(EmuData emuData, int wifiId)
-    {
-	    initCoeficients(emuData.getMobileDevicesCount(),
-	    		emuData.getMobileDevices());
-	    initFreeMembers(emuData.getMobileDevicesCount(), 
-	    		wifiId, emuData.getMobileDevices());
-    }
-    public WiFiPositionCalc()
-    {
-	    //empty
-    }
-	/**
-	 * @param wifiId 
-	 * @param mobileDevices
-	 */
-    private void initFreeMembers(int mobileDevicesCount,
-    		int wifiId, List<Device> mobileDevices)
-    {
-	    double[] freemembersd = new double[mobileDevicesCount];
-	    for (int i = 0; i < mobileDevicesCount; i++)
+	private double xi1, yi1, xi2, yi2;
+	private int circleIntersect(double x0, double y0, double r0, double x1, double y1, double r1)
+	{
+	    /* This function checks for the intersection of two circles.
+	    If one circle is wholly contained within the other a -1 is returned
+	    If there is no intersection of the two circles a 0 is returned
+	    If the circles intersect a 1 is returned and
+	    the coordinates are placed in xi1, yi1, xi2, yi2*/
+	 
+	    // dx and dy are the vertical And horizontal distances between
+	    // the circle centers.
+		double dx = x1 - x0;
+		double dy = y1 - y0;
+	 
+	    // Determine the straight-Line distance between the centers.
+	    double d = Math.sqrt((dy*dy) + (dx*dx));
+	 
+	 
+	    //Check for solvability.
+	    if (d > (r0 + r1))
 	    {
-	    	freemembersd[i] = mobileDevices.get(i).getSignalStrength(wifiId);
+	        // no solution. circles do Not intersect
+	        return 0;
 	    }
-	    this.freemembers = new SeriesImpl(freemembersd);
-    }
-	/**
-	 * @param mobileDevicesCount
-	 * @param mobileDevices
-	 */
-    private void initCoeficients(int mobileDevicesCount,
-            List<Device> mobileDevices)
-    {
-    	double[][] coefficientsd = new double[mobileDevicesCount][COORDINATE_COUNT];
-    	for (int i = 0; i < mobileDevicesCount; i++)
-    	{
-    		coefficientsd[i][0] = mobileDevices.get(0).getX();
-    		coefficientsd[i][1] = mobileDevices.get(0).getY();
-    	}
-    	this.coefficients = new MatrixImpl(coefficientsd);
-    }
-	/**
-	 * @return the emuData
-	 */
-    public EmuData getEmuData()
-    {
-	    return emuData;
-    }
-	/**
-	 * @param emuData the emuData to set
-	 */
-    public void setEmuData(EmuData emuData)
-    {
-	    this.emuData = emuData;
-    }
-
-	/**
-	 * @param list 
-	 * using class field values
-	 * @return 
-	 */
-    public Series calculate()
-    {
-	    return solveLinearEquation(this.coefficients, this.freemembers);
-    }
-	/**
-	 * using provided values
-	 * provided values overwrite old ones
-	 */
-    public Series calculate(EmuData emuData, int wifiId)
-    {
-	    initCoeficients(emuData.getMobileDevicesCount(),
-	    		emuData.getMobileDevices());
-	    initFreeMembers(emuData.getMobileDevicesCount(), 
-	    		wifiId, emuData.getMobileDevices());
-	    calculate();
-	    return getResult();
-    }
-
-	/**
-	 * using provided values.
-	 * provided values overwrite old ones
-	 */
-    public Series calculate(double[][] coeff, double[] freem)
-    {
-	    this.coefficients = new MatrixImpl(coeff);
-	    System.out.println("coef:"+this.coefficients.getData());
-	    this.freemembers = new SeriesImpl(freem);
-	    System.out.println("coef:"+this.freemembers.getData());
-	    calculate();
-	    return getResult();
-    }
-    
-    private Series solveLinearEquation(Matrix coefficients, Series freeMembers)
-    {
-    	this.result = SolverFactory.KRAMER.solve(coefficients, freeMembers);
-    	return getResult();
-    }
-    
-    public Series getResult()
-    {
-    	return this.result;
-    }
+	 
+	    if (d < Math.abs(r0 - r1)) 
+	    {
+	    	// no solution. one circle is contained in the other
+	        return -1;
+	    }
+	 
+	    // 'point 2' is the point where the Line through the circle
+	    // intersection points crosses the Line between the circle
+	    // centers.
+	 
+	    // Determine the distance from point 0 To point 2.
+	    double a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d);
+	 
+	    // Determine the coordinates of point 2.
+	    double x2 = x0 + (dx * a/d);
+	    double y2 = y0 + (dy * a/d);
+	 
+	    // Determine the distance from point 2 To either of the
+	    // intersection points.
+	    double h = Math.sqrt((r0*r0) - (a*a));
+	 
+	    // Now determine the offsets of the intersection points from
+	    // point 2.
+	    double rx = (0-dy) * (h/d);
+	    double ry = dx * (h/d);
+	 
+	    // Determine the absolute intersection points.
+	    xi1 = (float)(x2 + rx);
+	    xi2 = (float)(x2 - rx);
+	    yi1 = (float)(y2 + ry);
+	    yi2 = (float)(y2 - ry);
+	 
+	    return 1;	
+	}
+	private boolean priklausoCircle()
+	{
+		boolean ret = false;
+		return ret;
+	};
 }

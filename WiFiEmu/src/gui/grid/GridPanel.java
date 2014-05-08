@@ -124,7 +124,7 @@ public class GridPanel
 	 */
     protected void addWiFiStation(Device device)
     {
-    	if (addImageOntoCell("res/wifi.png") != CELL_TAKEN)
+    	if (addImageOntoCell(GridCellType.WIFI_REAL.getImage(), device) != CELL_TAKEN)
     	{
         	device.setDeviceType(DeviceType.WIFI_STATION);
         	getEmuData().addWiFiStationReal(device, true);
@@ -138,7 +138,7 @@ public class GridPanel
 	 */
     protected void addMobileDevice(Device device)
     {
-    	if (addImageOntoCell("res/person.jpg") != CELL_TAKEN)
+    	if (addImageOntoCell(GridCellType.PERSON.getImage(), device) != CELL_TAKEN)
     	{
         	device.setDeviceType(DeviceType.MOBILE);
         	getEmuData().addMobileDevice(device, true);	
@@ -149,8 +149,9 @@ public class GridPanel
     }
 	/**
 	 * @param string
+	 * @param device - device with wich to link
 	 */
-    private int addImageOntoCell(String imagePath)
+    private int addImageOntoCell(Image image, Device device)
     {
     	int ret = CELL_TAKEN;
     	int index = selectedCell.x + 
@@ -158,7 +159,8 @@ public class GridPanel
     	GridCell cell = getGridCell(index);
     	if ((cell != null) && (cell.getImage() == null))
     	{
-    		cell.setImage(imagePath);
+    		cell.setImage(image);
+    		cell.setDevice(device);
     		ret = SUCCESS;
     	}
     	return ret;
@@ -194,6 +196,19 @@ public class GridPanel
     {
 	    Graphics2D g2d = (Graphics2D) g.create();
 
+        if (grid.isEmpty())
+        {
+            initGrid(g2d);
+        }
+        drawCells(g2d);         
+        g2d.dispose();
+    }
+
+    /**
+	 * @param g2d
+	 */
+    private void initGrid(Graphics2D g2d)
+    {
         int width = getWidth();
         int height = getHeight();
 
@@ -202,66 +217,49 @@ public class GridPanel
      	
         int cellWidth = width / columnCount;
         int cellHeight = height / rowCount;
-
-        int xOffset = (width - (columnCount* cellWidth)) / 2;
-        int yOffset = (height - (rowCount * cellHeight)) / 2;
-
-        if (grid.isEmpty()) {
-            for (int row = 0; row < rowCount; row++) {
-                for (int col = 0; col < columnCount; col++) {
-                    GridCell cell = new GridCell(
-                            xOffset + (col * cellWidth),
-                            yOffset + (row * cellHeight),
-                            cellWidth,
-                            cellHeight);
-                    grid.add(cell);
-                }
-            }
-         }
-         drawCells(g2d);
-         
-         g2d.dispose();
-    }
-
-    /**
-	 * @param g2d
-	 */
-    private void drawCells(Graphics2D g2d)
-    {
-    	Image cellImg;
-        g2d.setColor(Color.BLACK);
-        for (GridCell cell : grid) 
-        {
-            g2d.draw(cell);
-            if (cell.getImage() != null)
-            {
-            	cellImg = cell.getImage();
-            	if (emuData.isRealView() && 
-            			(cellImg != GridCellType.WIFI_CALC.getImage())
-            		)
-            	{
-               	 	drawImage(g2d, cell, cellImg);
-            	}
-            	else if (!emuData.isRealView() &&
-            			(cellImg == GridCellType.WIFI_CALC.getImage())
-            		)
-            	{
-               	 	drawImage(g2d, cell, cellImg);
-            	}
-            }
+        
+        int currX = 0, currY = 0;
+        
+    	for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < columnCount; col++) {
+                GridCell cell = new GridCell(
+                        currX, currY,
+                        cellWidth,
+                        cellHeight);
+                grid.add(cell);
+                currX += cellWidth;
+            }            
+        	currX = 0;
+    		currY += cellHeight;            
         }
     }
 	/**
 	 * @param g2d
-	 * @param cell
-	 * @param cellImg
 	 */
-    private void drawImage(Graphics2D g2d, GridCell cell, Image cellImg)
+    private void drawCells(Graphics2D g2d)
     {
-    	g2d.drawImage(cellImg, cell.x+2, cell.y+2, 
-				cell.width-5, cell.height-5, null);
-		cell.getImage().flush();	    
+        g2d.setColor(Color.BLACK);
+        for (GridCell cell : grid) 
+        {
+        	if (emuData.isRealView() && 
+        			(cell.getCellType() != GridCellType.WIFI_CALC)
+        		)
+        	{
+           	 	cell.draw(g2d);
+        	}
+        	else if (!emuData.isRealView() &&
+        			(cell.getCellType() != GridCellType.WIFI_CALC)
+        		)
+        	{
+           	 	cell.draw(g2d);
+        	}
+        	else
+        	{
+        		cell.drawEmpty(g2d);
+        	}
+        }
     }
+
 	@Override
     public Dimension getPreferredSize() {
         return new Dimension(200, 200);

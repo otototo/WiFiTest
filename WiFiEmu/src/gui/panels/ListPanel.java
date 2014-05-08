@@ -11,6 +11,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import data.EmuData;
 
@@ -19,13 +21,16 @@ import data.EmuData;
  * */
 
 
-public class ListPanel extends JPanel implements EmuDataListener
+public class ListPanel extends JPanel implements EmuDataListener, ListSelectionListener
 {
 	private EmuData emuData;
 	private String myData[] = {"<Empty>"};
 	
 	private DefaultListModel<String> mobileNames;
 	private DefaultListModel<String> wifiRealNames;
+	
+	private JList<String> wifis; 
+	private int prevSelectedIndex = 0;
 	
 	/**
 	 * @param emuData 
@@ -46,8 +51,9 @@ public class ListPanel extends JPanel implements EmuDataListener
 	    add(scrollbar1); 
 
 	   	wifiRealNames = new DefaultListModel<String>();
-	   	JList<String> wifis = new JList<String>();
+	   	wifis = new JList<String>();
 	   	wifis.setModel(wifiRealNames);	   	   	
+	   	wifis.addListSelectionListener(this);
 	   	
 	   	JScrollPane scrollbar2 = new JScrollPane(wifis); 
 	   	scrollbar2.setEnabled(true);
@@ -102,6 +108,21 @@ public class ListPanel extends JPanel implements EmuDataListener
     			if (!model.contains(data[i]))
     				model.addElement(data[i]);
     		}
+		}
+    }
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 */
+    @Override
+    public void valueChanged(ListSelectionEvent e)
+    {
+		if (!e.getValueIsAdjusting())
+		{
+//			emuData.setWiFiSRIsSelected(prevSelectedIndex, false);
+//			emuData.setWiFiSRIsSelected(wifis.getSelectedIndex(), true);
+			
+			emuData.getWiFiStationReal(prevSelectedIndex).setSelected(false);
+			emuData.getWiFiStationReal(wifis.getSelectedIndex()).setSelected(true);
 		}
     }
 }

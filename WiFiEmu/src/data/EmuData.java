@@ -448,4 +448,21 @@ public class EmuData
 	    	notifier.notifyListeners(false, ChangeIdentifier.VIEW);
     }
 
+
+	/**
+	 * @param prevSelectedIndex
+	 * @param b
+	 */
+    public void setWiFiSRIsSelected(int index, boolean b)
+    {
+		getWiFiStationReal(index).setSelected(false);	
+	    if (notifier != null)
+	    	notifier.notifyListeners(true, ChangeIdentifier.SELECTED);    
+    }
+
+
+    public boolean getWiFiSRIsSelected(int index)
+    {
+		return getWiFiStationReal(index).isSelected();	 
+    }
 }

@@ -12,11 +12,13 @@ import java.util.Hashtable;
 public class Device
 {
 	private DeviceType deviceType;
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	private int id;
-	private Hashtable<Integer, Integer> signalStrengthTable;
+	private Hashtable<Integer, Double> signalStrengthTable;
 
+	private boolean isSelected = false;
+	
 	
 	private static int count = 0;
 	/**
@@ -24,13 +26,22 @@ public class Device
 	 * @param x 
      * 
      */
-    public Device(DeviceType deviceType, int x, int y)
+    public Device(DeviceType deviceType, double x, double y)
     {
 	    this.setDeviceType(deviceType);
 	    signalStrengthTable = new Hashtable<>();
 	    setX(x);
 	    setY(y);
 	    setId(++count);
+    }
+    
+    public Device(DeviceType deviceType, double x2, double y2, int id)
+    {
+	    this.setDeviceType(deviceType);
+	    signalStrengthTable = new Hashtable<>();
+	    setX(x2);
+	    setY(y2);
+	    setId(id);
     }
 
 	/**
@@ -52,7 +63,7 @@ public class Device
 	/**
 	 * @return the x
 	 */
-    public int getX()
+    public double getX()
     {
 	    return x;
     }
@@ -60,7 +71,7 @@ public class Device
 	/**
 	 * @param x the x to set
 	 */
-    public void setX(int x)
+    public void setX(double x)
     {
 	    this.x = x;
     }
@@ -68,7 +79,7 @@ public class Device
 	/**
 	 * @return the y
 	 */
-    public int getY()
+    public double getY()
     {
 	    return y;
     }
@@ -76,7 +87,7 @@ public class Device
 	/**
 	 * @param y the y to set
 	 */
-    public void setY(int y)
+    public void setY(double y)
     {
 	    this.y = y;
     }
@@ -145,7 +156,7 @@ public class Device
 	/**
 	 * @return the signalStrength
 	 */
-    public int getSignalStrength(int wifiId)
+    public double getSignalStrength(int wifiId)
     {
 	    return signalStrengthTable.get(wifiId);
     }
@@ -153,7 +164,7 @@ public class Device
 	/**
 	 * @param signalStrength the signalStrength to set
 	 */
-    public void addSignalStrength(int wifiId, int signalStrength)
+    public void addSignalStrength(int wifiId, double signalStrength)
     {
 	    this.signalStrengthTable.put(wifiId, signalStrength);
     }
@@ -161,7 +172,7 @@ public class Device
 	/**
 	 * @return the signalStrengthTable
 	 */
-    public Hashtable<Integer, Integer> getSignalStrengthTable()
+    public Hashtable<Integer, Double> getSignalStrengthTable()
     {
 	    return signalStrengthTable;
     }
@@ -169,8 +180,24 @@ public class Device
 	/**
 	 * @param signalStrengthTable the signalStrengthTable to set
 	 */
-    public void setSignalStrengthTable(Hashtable<Integer, Integer> signalStrengthTable)
+    public void setSignalStrengthTable(Hashtable<Integer, Double> signalStrengthTable)
     {
 	    this.signalStrengthTable = signalStrengthTable;
+    }
+
+	/**
+	 * @return the isSelected
+	 */
+    public boolean isSelected()
+    {
+	    return isSelected;
+    }
+
+	/**
+	 * @param isSelected the isSelected to set
+	 */
+    public void setSelected(boolean isSelected)
+    {
+	    this.isSelected = isSelected;
     }
 }

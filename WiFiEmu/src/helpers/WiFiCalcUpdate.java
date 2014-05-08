@@ -3,6 +3,9 @@
  */
 package helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import algorithm.SignalCalc;
 import algorithm.WiFiPositionCalc;
 import data.Device;
@@ -45,7 +48,7 @@ public class WiFiCalcUpdate
 	    {
 	    	updateStations(device);
 	    }
-	    recalculateWiFiPostition();
+//	    recalculateWiFiPostition();
 	    System.out.println("WiFiCalcUpdate.update()-");
     }
 
@@ -53,11 +56,21 @@ public class WiFiCalcUpdate
 	/**
 	 * 
 	 */
-    private void recalculateWiFiPostition()
+    public void calculateWiFiPostitions()
     {
-	    System.out.println("WiFiCalcUpdate.recalculateWiFiPostition()+");
-	    System.out.println("WiFiCalcUpdate.recalculateWiFiPostition()-");
+	    System.out.println("WiFiCalcUpdate.calculateWiFiPostitions()+");
+	    
+	    List<Device> wifis = getEmuData().getWiFiStationsReal();
+	    List<Device> mobiles = new ArrayList<Device>(); 
+	    List<Device> allMobiles = emuData.getMobileDevices(); 
+	   
+	    int iterationCount = 0;
+	    double[] accumulate = {0,0};
+	    
+	    
+	    System.out.println("WiFiCalcUpdate.calculateWiFiPostitions()-");
     }
+
 
 
 	/**

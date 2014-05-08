@@ -4,9 +4,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import gui.buttons.DeviceButton;
-import gui.buttons.StationButton;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,9 +12,6 @@ import data.EmuData;
 
 public class TopPanel extends JPanel implements ActionListener
 {
-	private StationButton stationButton = new StationButton();
-	private DeviceButton deviceButton = new DeviceButton();
-
 	private JButton realButton = new JButton("Reality");
 	private JButton calcButton = new JButton("Calculated");
 	
