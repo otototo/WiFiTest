@@ -121,8 +121,8 @@ public class ListPanel extends JPanel implements EmuDataListener, ListSelectionL
 //			emuData.setWiFiSRIsSelected(prevSelectedIndex, false);
 //			emuData.setWiFiSRIsSelected(wifis.getSelectedIndex(), true);
 			
-			emuData.getWiFiStationReal(prevSelectedIndex).setSelected(false);
-			emuData.getWiFiStationReal(wifis.getSelectedIndex()).setSelected(true);
+//			emuData.getWiFiStationReal(prevSelectedIndex).setSelected(false);
+//			emuData.getWiFiStationReal(wifis.getSelectedIndex()).setSelected(true);
 		}
     }
 }

@@ -82,7 +82,7 @@ public class SignalCalc
     private double calculateDecreasedSignal(Device mobile, Device wifi)
     {
     	double signalStrength = 
-    		EmuData.DEFAULT_MAX_SIGNAL_STRENGTH -
+    		EmuData.DEFAULT_MAX_SIGNAL_STRENGTH +
     		getDistance(mobile.getX(), mobile.getY(), wifi.getX(), wifi.getY()) * 
     		EmuData.DEFAULT_SIGNAL_DECREASE_PER_CELL;
     	return (signalStrength > 0)? signalStrength : 0;

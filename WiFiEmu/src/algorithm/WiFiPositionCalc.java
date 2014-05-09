@@ -3,9 +3,6 @@
  */
 package algorithm;
 
-
-
-
 /**
  * @author paulina
  *
@@ -13,6 +10,22 @@ package algorithm;
 public class WiFiPositionCalc
 {
 	private double xi1, yi1, xi2, yi2;
+	private double sx, sy;
+	
+	/**
+     * 
+     */
+    public WiFiPositionCalc()
+    {
+    	xi1 = -1;
+    	yi1 = -1;
+    	xi2 = -1;
+    	yi2 = -1;
+    	
+    	sx = -1;
+    	sy = -1;
+    }
+	
 	private int circleIntersect(double x0, double y0, double r0, double x1, double y1, double r1)
 	{
 	    /* This function checks for the intersection of two circles.
@@ -71,9 +84,76 @@ public class WiFiPositionCalc
 	 
 	    return 1;	
 	}
-	private boolean priklausoCircle()
+	
+	/**
+	 * @return [[x1, y1], [x2, y2]] - two intersections
+	 * */
+	public double[][] getDoubleIntersection()
 	{
-		boolean ret = false;
+		return new double[][]{{xi1, yi1}, {xi2, yi2}};
+	}
+	
+	/**
+	 * @return [sx, sy] - final solution
+	 * */
+	public double[] getIntersection()
+	{
+		return new double[]{sx, sy};
+	}
+	
+	
+	private boolean belongsToCircle(double x, double y, double r)
+	{
+		boolean ret = (Math.sqrt(x) + Math.sqrt(y) == Math.sqrt(r));		
 		return ret;
-	};
+	}
+
+	/**
+	 * @param coord
+	 * @param strength
+	 * 
+	 * @returns -2 -> not enough data. -1 no intersections. 0 - 2 intersections. 1 - 1 intersection.
+	 */
+    public int calculate(double[][] coord, double[] strength)
+    {
+    	if (strength.length < 2)
+    		return -2;
+    	
+    	int ret = -1;
+    	double x1, y1, x2, y2, r1, r2;
+    	double x3, y3, r3;
+    	
+    	double[] intersection = new double[2];
+    	
+	    for (int i = 0; i < strength.length -1; i++)
+	    {
+	    	x1 = coord[i][0];
+	    	y1 = coord[i][1];
+	    	r1 = strength[i];
+	    	
+	    	x2 = coord[i+1][0];
+	    	y2 = coord[i+1][1];
+	    	r2 = strength[i+1];
+	    	
+	    	if (circleIntersect(x1, y1, r1, x2, y2, r2) == 1)
+	    	{    	    	
+    	    	for (int j = i+2 ; j < strength.length; j++)
+    	    	{
+    	    		x3 = coord[j][0];
+    	    		y3 = coord[j][1];
+    	    		r3 = strength[j];
+
+    		    	if (((x3 == xi1) && (y3 == yi1)) ||
+    		    			((x3 == xi2) && (y2 == yi2)))
+    		    	{
+    		    		sx = x3;
+    		    		sy = y3;
+    		    		return 1;
+    		    	}
+    	    	}
+	    	}
+	    }
+	    
+	    return (xi1 != -1) ? -1 : -2;
+    }
 }

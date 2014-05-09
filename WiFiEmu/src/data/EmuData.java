@@ -17,7 +17,7 @@ public class EmuData
 {
 	public static final int DEFAULT_COLUMN_COUNT = 20;
 	public static final int DEFAULT_ROW_COUNT = 20;
-	public static final int DEFAULT_MAX_SIGNAL_STRENGTH = 50;
+	public static final int DEFAULT_MAX_SIGNAL_STRENGTH = 0;
 	public static final int DEFAULT_SIGNAL_DECREASE_PER_CELL = 5;
 	public static final int DEFAULT_MAX_GRID_COUNT = 30;
 	

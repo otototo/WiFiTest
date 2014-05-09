@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
  */
 public enum GridCellType
 {
-	PLAIN(Color.WHITE, null), WIFI_REAL(Color.WHITE, "res/wifi.png"), WIFI_CALC(Color.RED, null), PERSON(Color.WHITE, "res/person.png");
+	PLAIN(Color.WHITE, null), WIFI_REAL(Color.WHITE, "res/wifi.png"), WIFI_CALC(Color.RED, "res/wifi2.png"), PERSON(Color.WHITE, "res/person.png");
 	
 	private Color color;
 	private Image image = null;

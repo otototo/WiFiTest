@@ -3,6 +3,7 @@
  */
 package data;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
@@ -12,8 +13,8 @@ import java.util.Hashtable;
 public class Device
 {
 	private DeviceType deviceType;
-	private double x;
-	private double y;
+	private ArrayList<Double> x;
+	private ArrayList<Double> y;
 	private int id;
 	private Hashtable<Integer, Double> signalStrengthTable;
 
@@ -30,8 +31,11 @@ public class Device
     {
 	    this.setDeviceType(deviceType);
 	    signalStrengthTable = new Hashtable<>();
-	    setX(x);
-	    setY(y);
+	    this.x = new ArrayList<Double>();
+	    this.y = new ArrayList<Double>();
+	    
+	    addX(x);
+	    addY(y);
 	    setId(++count);
     }
     
@@ -39,8 +43,11 @@ public class Device
     {
 	    this.setDeviceType(deviceType);
 	    signalStrengthTable = new Hashtable<>();
-	    setX(x2);
-	    setY(y2);
+	    
+	    this.x = new ArrayList<Double>();
+	    this.y = new ArrayList<Double>();
+	    addX(x2);
+	    addY(y2);
 	    setId(id);
     }
 
@@ -59,13 +66,20 @@ public class Device
     {
 	    this.deviceType = deviceType;
     }
-
 	/**
 	 * @return the x
 	 */
+    public double getX(int i)
+    {
+	    return x.get(i);
+    }
+
+	/**
+	 * @return the first x
+	 */
     public double getX()
     {
-	    return x;
+	    return x.get(0);
     }
 
 	/**
@@ -73,7 +87,24 @@ public class Device
 	 */
     public void setX(double x)
     {
-	    this.x = x;
+    	this.x.clear();
+	    addX(x);
+    }
+
+	/**
+	 * @param x the x to set
+	 */
+    public void setX(int i, double x)
+    {
+	    this.x.set(i, x);
+    }
+
+	/**
+	 * @param x2
+	 */
+    public void addX(double x)
+    {
+	    this.x.add(x);
     }
 
 	/**
@@ -81,7 +112,25 @@ public class Device
 	 */
     public double getY()
     {
-	    return y;
+	    return this.y.get(0);
+    }
+
+	/**
+	 * @return the y
+	 */
+    public double getY(int i)
+    {
+	    return this.y.get(i);
+    }
+    
+    public void clearX()
+    {
+    	this.x.clear();
+    }
+    
+    public void clearY()
+    {
+    	this.y.clear();
     }
 
 	/**
@@ -89,10 +138,27 @@ public class Device
 	 */
     public void setY(double y)
     {
-	    this.y = y;
+    	this.y.clear();
+	    addY(y);
     }
-    
-    /** equal coordinates regardles of device type*/
+
+
+	/**
+	 * @param y the y to set
+	 */
+    public void setY(int i, double y)
+    {
+	    this.y.set(i, y);
+    }
+    /**
+	 * @param y2
+	 */
+    public void addY(double y)
+    {
+	    this.y.add(y);
+    }
+
+	/** equal coordinates regardles of device type*/
     public boolean equals(Device device)
     {
         if ((getX() == device.getX()) && (getY() == device.getY()))

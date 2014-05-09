@@ -248,7 +248,7 @@ public class GridPanel
            	 	cell.draw(g2d);
         	}
         	else if (!emuData.isRealView() &&
-        			(cell.getCellType() != GridCellType.WIFI_CALC)
+        			(cell.getCellType() == GridCellType.WIFI_CALC)
         		)
         	{
            	 	cell.draw(g2d);

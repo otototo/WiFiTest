@@ -21,6 +21,7 @@ import data.DeviceType;
  */
 public class GridCell extends Rectangle
 {
+	private static final int signalR = 5;
 	private GridCellType cellType;
 	private Image image;
 	private Device device;
@@ -103,18 +104,24 @@ public class GridCell extends Rectangle
 		if (device.isSelected() && (device.getDeviceType() == DeviceType.WIFI_STATION))
 		{
 	    	g2d.setColor(Color.RED);
-			g2d.fillOval(x, y, width*5, height*5);
+	    	//1-0
+	    	//3-1
+	    	//tik nelyginiams
+	    	int coef = ((signalR - 1) > 0) ? ((signalR - 1) / 2) : 0;
+	    	System.out.println("koef="+coef);
+			g2d.fillOval(x - width * coef, y-height * coef, 
+					width*signalR, height*signalR);
 		}
 		else if (device.isSelected() && (device.getDeviceType() == DeviceType.MOBILE))
 		{
 	    	g2d.setColor(Color.CYAN);
 			g2d.fillRect(x, y, width, height);
 		}
-		else
-		{
+    	else
+    	{
+        	g2d.setColor(Color.BLACK);
     		drawEmpty(g2d);
-		}
-
+    	}
     	g2d.setColor(Color.BLACK);
     	g2d.drawImage(getImage(), x+2, y+2, 
 				width-2, height-2, null);

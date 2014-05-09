@@ -1,5 +1,7 @@
 package gui.panels;
 
+import helpers.WiFiCalcUpdate;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,7 @@ public class TopPanel extends JPanel implements ActionListener
 	private JButton calcButton = new JButton("Calculated");
 	
 	private EmuData emuData;
+	private WiFiCalcUpdate calcUpdate;
 	/**
 	 * @param emuData 
      * 
@@ -40,6 +43,8 @@ public class TopPanel extends JPanel implements ActionListener
 	    
 //	    setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 	    setBorder(BorderFactory.createEtchedBorder());
+	    
+	    calcUpdate = new WiFiCalcUpdate(emuData);
     }
 	/**
 	 * @param emuData2
@@ -66,6 +71,7 @@ public class TopPanel extends JPanel implements ActionListener
 	    	emuData.setRealView(false);
 	    	calcButton.setEnabled(false);
 	    	realButton.setEnabled(true);
+	    	calcUpdate.calculateWiFiPostitions();
 	    }
     }
     
