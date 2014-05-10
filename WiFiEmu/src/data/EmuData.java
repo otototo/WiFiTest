@@ -3,6 +3,7 @@
  */
 package data;
 
+import gui.grid.GridViewType;
 import helpers.ChangeIdentifier;
 import helpers.EmuDataNotifier;
 
@@ -35,7 +36,7 @@ public class EmuData
 	private Device selectedDevice;
 	private boolean justLoaded = false;
 	
-	private boolean realView = true; //if false calculated position are shown 
+	private GridViewType realView = GridViewType.Reality; //if false calculated position are shown 
 	
 	/**
      * 
@@ -432,16 +433,16 @@ public class EmuData
 	/**
 	 * @return the realView
 	 */
-    public boolean isRealView()
+    public boolean isView(GridViewType view)
     {
-	    return realView;
+	    return realView == view;
     }
 
 
 	/**
 	 * @param realView the realView to set
 	 */
-    public void setRealView(boolean realView)
+    public void setRealView(GridViewType realView)
     {
     	System.out.println("realView="+realView);
 	    this.realView = realView;

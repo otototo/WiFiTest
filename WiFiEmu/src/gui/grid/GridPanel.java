@@ -248,13 +248,13 @@ public class GridPanel
         g2d.setColor(Color.BLACK);
         for (GridCell cell : grid) 
         {
-        	if (emuData.isRealView() && 
+        	if (emuData.isView(GridViewType.Reality) && 
         			(cell.getCellType() != GridCellType.WIFI_CALC)
         		)
         	{
            	 	cell.draw(g2d);
         	}
-        	else if (!emuData.isRealView())
+        	else if (emuData.isView(GridViewType.Calculated))
         	{
            	 	cell.draw(g2d);
         	}
@@ -347,8 +347,8 @@ public class GridPanel
     @Override
     public void mouseClicked(MouseEvent e)
     {
-    	System.out.println("mouseClicked.realView:"+emuData.isRealView());
-    	if (emuData.isRealView())
+    	System.out.println("mouseClicked.realView:"+emuData.isView(GridViewType.Reality));
+    	if (emuData.isView(GridViewType.Reality))
     	{
         	Device device = new Device(DeviceType.WIFI_STATION, 
         			selectedCell.x, selectedCell.y);
