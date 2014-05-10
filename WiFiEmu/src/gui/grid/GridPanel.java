@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -198,23 +199,26 @@ public class GridPanel
 	{    			
        super.paintComponent(g);
 	   Graphics2D g2d = (Graphics2D) g.create();
+	   g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON);
        drawGrid(g2d);  
-       drawweirdstuff(g2d);
+       drawMDS(g2d);
        g2d.dispose();
     }
     
     /**
 	 * 
 	 */
-    private void drawweirdstuff(Graphics2D g2d)
+    private void drawMDS(Graphics2D g2d)
     {
 	    for (MDSPoint p : mds)
 	    {
 	    	g2d.setColor(Color.MAGENTA);
 	    	int w = 10, h = 10;
 	    	g2d.fillRect(p.getPoint().x, p.getPoint().y, w, h);
+	    	g2d.setColor(Color.BLUE);
 	    	int length = g2d.getFontMetrics().charsWidth((p.getID()+"").toCharArray(), 0, (p.getID()+"").length());
-        	g2d.drawString(p.getID()+"", p.getPoint().x+w-length, p.getPoint().y+h);
+        	g2d.drawString(p.getID()+"", p.getPoint().x+w, p.getPoint().y+h);
 	    }
     }
 	/**
@@ -354,6 +358,10 @@ public class GridPanel
         	int newColCount = getEmuData().getGridColumnCount();
         	int newRowCount = getEmuData().getGridRowCount();
        		setGrid(newColCount, newRowCount);
+       		if (id == ChangeIdentifier.ALL)
+       		{
+       			mds.clear();
+       		}
     	}
     	else if (id == ChangeIdentifier.WIFIC)
     	{

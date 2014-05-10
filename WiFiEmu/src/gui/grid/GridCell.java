@@ -113,8 +113,6 @@ public class GridCell extends Rectangle
     }
     private void drawImage(Graphics2D g2d)
     {    	
-    	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-    			RenderingHints.VALUE_ANTIALIAS_ON);
     	if (mds != null)
     	{
     		System.out.println("GridCell.drawImage() mds+");
