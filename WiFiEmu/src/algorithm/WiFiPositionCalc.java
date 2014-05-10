@@ -149,13 +149,25 @@ public class WiFiPositionCalc
     	double resx = 0, resy = 0;
     	for (Vector<Double> vd : inter)
     	{
+    		System.out.println(""+vd.get(0) +" "+ vd.get(1));
     		resx += vd.get(0);
     		resy += vd.get(1);
     	}
     	resx /= inter.size();
     	resy /= inter.size();
-    	sx = resx;
-		sy = resy;
+    	
+    	double d, mind = Float.MAX_VALUE;
+    	for (Vector<Double> vd : inter)
+    	{
+    		d = Math.pow(resx-vd.get(0), 2)+Math.pow(resy-vd.get(1), 2);
+    		if (d < mind)
+    		{
+    			mind = d;
+    			sx = vd.get(0);
+    			sy = vd.get(1);
+    		}
+    				
+    	}
 
     	System.out.println("WiFiPositionCalc.calculate() sx="+sx);
     	System.out.println("WiFiPositionCalc.calculate() sy="+sy);
@@ -202,4 +214,5 @@ public class WiFiPositionCalc
 	    
 	    return (xi1 != -1) ? -1 : -2;*/
     }
+    
 }

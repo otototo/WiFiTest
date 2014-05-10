@@ -1,6 +1,8 @@
 package gui.panels;
 
 import gui.grid.GridPanel;
+import helpers.ChangeIdentifier;
+import helpers.EmuDataListener;
 import helpers.WiFiCalcUpdate;
 
 import java.awt.GridLayout;
@@ -13,7 +15,7 @@ import javax.swing.JPanel;
 
 import data.EmuData;
 
-public class TopPanel extends JPanel implements ActionListener
+public class TopPanel extends JPanel implements ActionListener, EmuDataListener
 {
 	private JButton realButton = new JButton("Reality");
 	private JButton calcButton = new JButton("Calculated");
@@ -75,6 +77,17 @@ public class TopPanel extends JPanel implements ActionListener
 	    	calcButton.setEnabled(false);
 	    	realButton.setEnabled(true);
 	    	calcUpdate.calculateWiFiPostitions();
+	    }
+    }
+	/* (non-Javadoc)
+	 * @see helpers.EmuDataListener#onEmuDataChange(boolean, helpers.ChangeIdentifier)
+	 */
+    @Override
+    public void onEmuDataChange(boolean realDataChange, ChangeIdentifier id)
+    {
+	    if (id == ChangeIdentifier.ALL)
+	    {
+	    	actionPerformed(new ActionEvent(realButton, 0, "Reality"));	    	
 	    }
     }
     

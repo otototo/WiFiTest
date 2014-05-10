@@ -94,9 +94,11 @@ public class GridCell extends Rectangle
      */
     public void drawEmpty(Graphics2D g2d)
     {
+		g2d.setColor(Color.BLACK);
     	g2d.drawRect(x, y, width, height);
     	if (prediction != null)
     	{
+    		g2d.setColor(Color.MAGENTA);
     		int length = g2d.getFontMetrics().charsWidth((prediction.getId()+"").toCharArray(), 0, (prediction.getId()+"").length());
         	g2d.drawString(prediction.getId()+"", x+width-length, y+height);
     	}
@@ -148,6 +150,7 @@ public class GridCell extends Rectangle
 			}
 		}
     	
+		g2d.setColor(Color.MAGENTA);
     	g2d.drawString(device.getId()+"", x, y+height);
     	if (prediction != null)
     	{

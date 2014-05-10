@@ -42,8 +42,8 @@ public class MainFrame
                 
                 JFrame frame = new JFrame("WiFi Simulator");
 
-                frame.setSize(800, 600);
-                frame.setMinimumSize(new Dimension(800, 600));
+                frame.setSize(800, 800);
+                frame.setMinimumSize(new Dimension(800, 800));
         	    
         	    MenuBar menuBar = new MenuBar(emuData);
         	    frame.setJMenuBar(menuBar);
