@@ -1,5 +1,6 @@
 package gui.panels;
 
+import gui.grid.GridPanel;
 import helpers.WiFiCalcUpdate;
 
 import java.awt.GridLayout;
@@ -16,14 +17,16 @@ public class TopPanel extends JPanel implements ActionListener
 {
 	private JButton realButton = new JButton("Reality");
 	private JButton calcButton = new JButton("Calculated");
+	private JButton mds = new JButton("MDS");
 	
 	private EmuData emuData;
 	private WiFiCalcUpdate calcUpdate;
 	/**
 	 * @param emuData 
+	 * @param gridPanel 
      * 
      */
-    public TopPanel(EmuData emuData) 
+    public TopPanel(EmuData emuData, GridPanel gridPanel) 
     {
 	    super();
 	    setEmuData(emuData);
@@ -44,7 +47,7 @@ public class TopPanel extends JPanel implements ActionListener
 //	    setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 	    setBorder(BorderFactory.createEtchedBorder());
 	    
-	    calcUpdate = new WiFiCalcUpdate(emuData);
+	    calcUpdate = new WiFiCalcUpdate(emuData, gridPanel);
     }
 	/**
 	 * @param emuData2

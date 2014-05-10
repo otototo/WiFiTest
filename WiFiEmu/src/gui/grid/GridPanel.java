@@ -2,7 +2,7 @@ package gui.grid;
 
 import helpers.ChangeIdentifier;
 import helpers.EmuDataListener;
-import helpers.WiFiCalcUpdate;
+import helpers.WiFiSignalUpdate;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -42,7 +42,7 @@ public class GridPanel
 	private List<GridCell> grid;
 	private Point selectedCell = null;
 	private MouseAdapter mouseHandler = null;
-	private WiFiCalcUpdate wifiCalcUpdate;
+	private WiFiSignalUpdate wifiSignalUpdate;
 	
 	private int currentColumnCount;
 	private int currentRowCount;
@@ -54,7 +54,7 @@ public class GridPanel
     {
 	    super();
 	    initEmuData(emuData);
-	    wifiCalcUpdate = new WiFiCalcUpdate(emuData);
+	    wifiSignalUpdate = new WiFiSignalUpdate(emuData);
 //	    setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 	    setBackground(Color.WHITE);
     }
@@ -128,7 +128,7 @@ public class GridPanel
     	{
         	device.setDeviceType(DeviceType.WIFI_STATION);
         	getEmuData().addWiFiStationReal(device, true);
-        	wifiCalcUpdate.update(device);
+        	wifiSignalUpdate.update(device);
         	
 //        	repaint();
     	}
@@ -142,16 +142,23 @@ public class GridPanel
     	{
         	device.setDeviceType(DeviceType.MOBILE);
         	getEmuData().addMobileDevice(device, true);	
-        	wifiCalcUpdate.update(device);
+        	wifiSignalUpdate.update(device);
         	
 //        	repaint();
     	}
     }
+    public void addPrediction(Device device, int x, int y)
+    {
+    	int index = x + (y * getCurrentColumnCount());
+    	GridCell cell = getGridCell(index);
+		cell.setPrediction(device);
+    }
+    
 	/**
 	 * @param string
 	 * @param device - device with wich to link
 	 */
-    private int addImageOntoCell(Image image, Device device)
+    public int addImageOntoCell(Image image, Device device)
     {
     	int ret = CELL_TAKEN;
     	int index = selectedCell.x + 
@@ -247,9 +254,7 @@ public class GridPanel
         	{
            	 	cell.draw(g2d);
         	}
-        	else if (!emuData.isRealView() &&
-        			(cell.getCellType() == GridCellType.WIFI_CALC)
-        		)
+        	else if (!emuData.isRealView())
         	{
            	 	cell.draw(g2d);
         	}
@@ -329,6 +334,11 @@ public class GridPanel
         	int newRowCount = getEmuData().getGridRowCount();
        		setGrid(newColCount, newRowCount);
     	}
+    	else if (id == ChangeIdentifier.WIFIC)
+    	{
+    		
+    	}	
+    		
    		repaint();
     }
 	/* (non-Javadoc)

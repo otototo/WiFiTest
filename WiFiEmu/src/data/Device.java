@@ -19,6 +19,7 @@ public class Device
 	private Hashtable<Integer, Double> signalStrengthTable;
 
 	private boolean isSelected = false;
+	private boolean onLeft = true;
 	
 	
 	private static int count = 0;
@@ -265,5 +266,26 @@ public class Device
     public void setSelected(boolean isSelected)
     {
 	    this.isSelected = isSelected;
+    }
+
+	/**
+	 * @return the onLeft
+	 */
+    public boolean isOnLeft()
+    {
+	    return onLeft;
+    }
+
+	/**
+	 * @param onLeft the onLeft to set
+	 */
+    public void setOnLeft(boolean onLeft)
+    {
+	    this.onLeft = onLeft;
+    }
+    
+    public static void resetCount()
+    {
+    	count = 0;
     }
 }

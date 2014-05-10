@@ -7,6 +7,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,6 +28,7 @@ public class GridCell extends Rectangle
 	private GridCellType cellType;
 	private Image image;
 	private Device device;
+	private Device prediction;
 
 	/**
 	 * @param i
@@ -91,6 +95,11 @@ public class GridCell extends Rectangle
     public void drawEmpty(Graphics2D g2d)
     {
     	g2d.drawRect(x, y, width, height);
+    	if (prediction != null)
+    	{
+    		int length = g2d.getFontMetrics().charsWidth((prediction.getId()+"").toCharArray(), 0, (prediction.getId()+"").length());
+        	g2d.drawString(prediction.getId()+"", x+width-length, y+height);
+    	}
     }
     public void draw(Graphics2D g2d)
     {
@@ -101,6 +110,8 @@ public class GridCell extends Rectangle
     }
     private void drawImage(Graphics2D g2d)
     {    	
+    	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+    			RenderingHints.VALUE_ANTIALIAS_ON);
 		if (device.isSelected() && (device.getDeviceType() == DeviceType.WIFI_STATION))
 		{
 	    	g2d.setColor(Color.RED);
@@ -124,10 +135,25 @@ public class GridCell extends Rectangle
     	}
     	g2d.setColor(Color.BLACK);
     	g2d.drawImage(getImage(), x+2, y+2, 
-				width-2, height-2, null);
+				width-2, height-2, null);    	
 		getImage().flush();	    
+		
+		if (getDevice().getDeviceType() == DeviceType.MOBILE)
+		{
+			
+			for (java.lang.Double val : device.getSignalStrengthTable().values())
+			{
+				Shape theCircle = new Ellipse2D.Double(x - width * val + width/2, y - height * val + height/2, 2.0 * width* val, 2.0 * height * val);
+			    g2d.draw(theCircle);
+			}
+		}
     	
     	g2d.drawString(device.getId()+"", x, y+height);
+    	if (prediction != null)
+    	{
+    		int length = g2d.getFontMetrics().charsWidth((prediction.getId()+"").toCharArray(), 0, (prediction.getId()+"").length());
+        	g2d.drawString(prediction.getId()+"", x+width-length, y+height);
+    	}
 		
     }
 
@@ -145,5 +171,13 @@ public class GridCell extends Rectangle
     public void setDevice(Device device)
     {
 	    this.device = device;
+    }
+
+	/**
+	 * @param device2
+	 */
+    public void setPrediction(Device device)
+    {
+	    this.prediction = device;
     }
 }

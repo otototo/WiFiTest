@@ -3,6 +3,8 @@
  */
 package algorithm;
 
+import java.util.Vector;
+
 /**
  * @author paulina
  *
@@ -116,6 +118,50 @@ public class WiFiPositionCalc
 	 */
     public int calculate(double[][] coord, double[] strength)
     {
+    	/*
+    	 * 
+    	 * 
+    	 * 
+    	 */
+    	Vector<Vector<Double>> inter = new Vector<Vector<Double>>();
+    	for (int i = 0 ; i < strength.length; i++)
+    		System.out.println(coord[i][0]+" "+ coord[i][1]+" "+ strength[i]);
+    	for (int i = 0; i < strength.length -1; i++)
+    	{
+    		for (int jj = i + 1; jj < strength.length; jj++)
+    		{
+    			if (circleIntersect(coord[i][0], coord[i][1], strength[i], coord[jj][0], coord[jj][1], strength[jj]) == 1)
+    	    	{
+    				Vector<Double> v = new Vector<Double>();
+    				v.add(xi1);
+    				v.add(yi1);
+    				Vector<Double> v1 = new Vector<Double>();
+    				v1.add(xi2);
+    				v1.add(yi2);
+    				inter.add(v);
+    				inter.add(v1);
+    	    	}
+    			
+    		}
+    		
+    	}
+    	
+    	double resx = 0, resy = 0;
+    	for (Vector<Double> vd : inter)
+    	{
+    		resx += vd.get(0);
+    		resy += vd.get(1);
+    	}
+    	resx /= inter.size();
+    	resy /= inter.size();
+    	sx = resx;
+		sy = resy;
+
+    	System.out.println("WiFiPositionCalc.calculate() sx="+sx);
+    	System.out.println("WiFiPositionCalc.calculate() sy="+sy);
+		return 1;
+/*
+    	
     	if (strength.length < 2)
     		return -2;
     	
@@ -154,6 +200,6 @@ public class WiFiPositionCalc
 	    	}
 	    }
 	    
-	    return (xi1 != -1) ? -1 : -2;
+	    return (xi1 != -1) ? -1 : -2;*/
     }
 }

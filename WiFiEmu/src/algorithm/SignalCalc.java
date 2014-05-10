@@ -91,8 +91,8 @@ public class SignalCalc
 	/**
 	 * @return
 	 */
-    private double getDistance(double d, double e, double f, double g)
+    private double getDistance(double x1, double y1, double x2, double y2)
     {
-	    return Math.sqrt(Math.pow(d-f, 2)+Math.pow(e-g, 2));
+	    return Math.sqrt(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2));
     }
 }

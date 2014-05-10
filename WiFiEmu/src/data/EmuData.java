@@ -18,7 +18,7 @@ public class EmuData
 	public static final int DEFAULT_COLUMN_COUNT = 20;
 	public static final int DEFAULT_ROW_COUNT = 20;
 	public static final int DEFAULT_MAX_SIGNAL_STRENGTH = 0;
-	public static final int DEFAULT_SIGNAL_DECREASE_PER_CELL = 5;
+	public static final int DEFAULT_SIGNAL_DECREASE_PER_CELL = 1;
 	public static final int DEFAULT_MAX_GRID_COUNT = 30;
 	
 	private int gridRowCount;
@@ -70,6 +70,7 @@ public class EmuData
     	setGridRowCount(DEFAULT_ROW_COUNT, false);
     	setDecreasePerCell(DEFAULT_SIGNAL_DECREASE_PER_CELL, false);
     	setStationStrength(DEFAULT_MAX_SIGNAL_STRENGTH, false);    	
+    	resetCount();
     }
     
 	/**
@@ -464,5 +465,10 @@ public class EmuData
     public boolean getWiFiSRIsSelected(int index)
     {
 		return getWiFiStationReal(index).isSelected();	 
+    }
+    
+    public void resetCount()
+    {
+    	Device.resetCount();	
     }
 }

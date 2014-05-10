@@ -37,7 +37,7 @@ public class MainPanel extends JPanel
 	    notifier.addListener(gridPanel);
 	    add(gridPanel, BorderLayout.CENTER);
 	    
-	    topPanel = new TopPanel(emuData);
+	    topPanel = new TopPanel(emuData, gridPanel);
 	    add(topPanel, BorderLayout.PAGE_START);
 	    
 	    listPanel = new ListPanel(emuData);

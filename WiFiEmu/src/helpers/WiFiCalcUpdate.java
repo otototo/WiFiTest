@@ -3,6 +3,9 @@
  */
 package helpers;
 
+import gui.grid.GridCellType;
+import gui.grid.GridPanel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,39 +21,21 @@ import data.EmuData;
  */
 public class WiFiCalcUpdate
 {
-	private SignalCalc calculateSignal;
 	private WiFiPositionCalc calculateWiFiPosition;
 	private EmuData emuData;
+	private GridPanel gridPanel;
 	
 	/**
+	 * @param gridPanel 
      * 
      */
-    public WiFiCalcUpdate(EmuData emuData)
+    public WiFiCalcUpdate(EmuData emuData, GridPanel gridPanel)
     {
-	    this.setCalculateSignal(new SignalCalc());
 	    this.setCalculateWiFiPosition(new WiFiPositionCalc());	
 	    this.setEmuData(emuData);
+	    this.setGridPanel(gridPanel);
     }
 	
-	
-	/**
-	 * @param device
-	 */
-    public void update(Device device)
-    {
-    	System.out.println("WiFiCalcUpdate.update()+");
-    	System.out.println("device:"+device.getDeviceType());
-	    if (device.getDeviceType() == DeviceType.MOBILE)
-	    {
-	    	updateMobiles(device);
-	    }
-	    else if (device.getDeviceType() == DeviceType.WIFI_STATION)
-	    {
-	    	updateStations(device);
-	    }
-//	    recalculateWiFiPostition();
-	    System.out.println("WiFiCalcUpdate.update()-");
-    }
 
 
 	/**
@@ -96,23 +81,11 @@ public class WiFiCalcUpdate
 		    	System.out.println("calculateWiFiPostitions x="+x+" y="+y);
 	    		wifical = new Device(wifi.getDeviceType(), x, y, wifiId);
 	    		
-	    		emuData.addWiFiStationCalculated(wifical, true);
-	    	}
-	    	else if (ret == 0)
-	    	{
-	    		wifical = new Device(wifi.getDeviceType(), -1, -1, wifiId);
-	    		wifi.clearX();
-	    		wifi.clearY();
+	    		int cellx = (int)x;
+	    		int celly = (int)y;
 	    		
-	    		double[][] intersections = calculateWiFiPosition.getDoubleIntersection();
-	    		wifi.addX(intersections[0][0]);
-	    		wifi.addX(intersections[1][0]);
-		    	System.out.println("calculateWiFiPostitions x1="+intersections[0][0]+" x2="+intersections[1][0]);
+	    		getGridPanel().addPrediction(wifical, cellx, celly);
 	    		
-	    		wifi.addY(intersections[0][1]);
-	    		wifi.addY(intersections[1][1]);
-		    	System.out.println("calculateWiFiPostitions y1="+intersections[0][1]+" y2="+intersections[1][1]);
-
 	    		emuData.addWiFiStationCalculated(wifical, true);
 	    	}
 	    }
@@ -122,52 +95,7 @@ public class WiFiCalcUpdate
     }
 
 
-
-	/**
-	 * @param device
-	 */
-    private void updateStations(Device wifi)
-    {
-    	System.out.println("WiFiCalcUpdate.updateStations()+");
-    	System.out.println("wifi="+wifi);
-    	if ((wifi != null) && (emuData.getMobileDevicesCount() > 0))
-    		calculateSignal.calculate(wifi, emuData.getMobileDevices());
-    	System.out.println("WiFiCalcUpdate.updateStations()-");
-    }
-
-
-	/**
-	 * @param device 
-	 * 
-	 */
-    private void updateMobiles(Device mobile)
-    {
-    	System.out.println("WiFiCalcUpdate.updateMobiles()+");
-    	System.out.println("mobile="+mobile);
-    	if ((mobile != null) && (emuData.getWiFiStationsRealCount() > 0))
-    		calculateSignal.calculate(emuData.getWiFiStationsReal(), mobile);
-    	System.out.println("WiFiCalcUpdate.updateMobiles()-");
-    }
-
-
-	/**
-	 * @return the calculateSignal
-	 */
-    public SignalCalc getCalculateSignal()
-    {
-	    return calculateSignal;
-    }
-
-
-	/**
-	 * @param calculateSignal the calculateSignal to set
-	 */
-    public void setCalculateSignal(SignalCalc calculateSignal)
-    {
-	    this.calculateSignal = calculateSignal;
-    }
-
-
+   
 	/**
 	 * @return the calculateWiFiPosition
 	 */
@@ -201,6 +129,24 @@ public class WiFiCalcUpdate
     public void setEmuData(EmuData emuData)
     {
 	    this.emuData = emuData;
+    }
+
+
+	/**
+	 * @return the gridPanel
+	 */
+    public GridPanel getGridPanel()
+    {
+	    return gridPanel;
+    }
+
+
+	/**
+	 * @param gridPanel the gridPanel to set
+	 */
+    public void setGridPanel(GridPanel gridPanel)
+    {
+	    this.gridPanel = gridPanel;
     }
 
 }
