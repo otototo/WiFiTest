@@ -19,6 +19,8 @@ public class EmuData
 	public static final int DEFAULT_COLUMN_COUNT = 20;
 	public static final int DEFAULT_ROW_COUNT = 20;
 	public static final int DEFAULT_MAX_SIGNAL_STRENGTH = 0;
+	//TODO perrasyt i funkcija, kuri skaiciuoja stipri pagal metru skaiciu
+	// 1 langelis = 1 metras
 	public static final int DEFAULT_SIGNAL_DECREASE_PER_CELL = 1;
 	public static final int DEFAULT_MAX_GRID_COUNT = 30;
 	
@@ -279,7 +281,7 @@ public class EmuData
     	{
     		device = wiFiStationsReal.get(i);
     		if (device.equals(station) && 
-  				(DeviceType.WIFI_STATION == station.getDeviceType()))
+  				(DeviceType.WIFI_REAL == station.getDeviceType()))
 			{
     			index = i;
     			break;
@@ -296,7 +298,7 @@ public class EmuData
     	{
     		device = wiFiStationsReal.get(i);
     		if (device.equals(station) && 
-  				(DeviceType.WIFI_STATION == station.getDeviceType()))
+  				(DeviceType.WIFI_REAL == station.getDeviceType()))
 			{
     			index = i;
     			break;

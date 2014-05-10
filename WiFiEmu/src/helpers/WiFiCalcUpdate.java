@@ -3,16 +3,13 @@
  */
 package helpers;
 
-import gui.grid.GridCellType;
 import gui.grid.GridPanel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import algorithm.SignalCalc;
 import algorithm.WiFiPositionCalc;
 import data.Device;
-import data.DeviceType;
 import data.EmuData;
 
 /**

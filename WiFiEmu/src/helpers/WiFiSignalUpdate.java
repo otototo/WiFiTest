@@ -39,7 +39,7 @@ public class WiFiSignalUpdate
 	    {
 	    	updateMobiles(device);
 	    }
-	    else if (device.getDeviceType() == DeviceType.WIFI_STATION)
+	    else if (device.getDeviceType() == DeviceType.WIFI_REAL)
 	    {
 	    	updateStations(device);
 	    }

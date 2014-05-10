@@ -1,8 +1,10 @@
 package gui.panels;
 
 import gui.grid.GridPanel;
+import gui.grid.GridViewType;
 import helpers.ChangeIdentifier;
 import helpers.EmuDataListener;
+import helpers.MDSUpdate;
 import helpers.WiFiCalcUpdate;
 
 import java.awt.GridLayout;
@@ -23,6 +25,7 @@ public class TopPanel extends JPanel implements ActionListener, EmuDataListener
 	
 	private EmuData emuData;
 	private WiFiCalcUpdate calcUpdate;
+	private MDSUpdate mdsUpdate;
 	/**
 	 * @param emuData 
 	 * @param gridPanel 
@@ -45,11 +48,14 @@ public class TopPanel extends JPanel implements ActionListener, EmuDataListener
 	    add(calcButton);
 //	    setSize(20,20);
 	    
+	    mds.addActionListener(this);
+	    add(mds);
 	    
 //	    setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 	    setBorder(BorderFactory.createEtchedBorder());
 	    
 	    calcUpdate = new WiFiCalcUpdate(emuData, gridPanel);
+	    mdsUpdate = new MDSUpdate(emuData, gridPanel);
     }
 	/**
 	 * @param emuData2
@@ -67,16 +73,26 @@ public class TopPanel extends JPanel implements ActionListener, EmuDataListener
     	System.out.println(e);
 	    if (e.getSource() == realButton)
 	    {
-	    	emuData.setRealView(true);
+	    	emuData.setRealView(GridViewType.Reality);
 	    	calcButton.setEnabled(true);
 	    	realButton.setEnabled(false);
+	    	mds.setEnabled(true);
 	    }
 	    else if (e.getSource() == calcButton)
 	    {
-	    	emuData.setRealView(false);
+	    	emuData.setRealView(GridViewType.Calculated);
 	    	calcButton.setEnabled(false);
 	    	realButton.setEnabled(true);
+	    	mds.setEnabled(true);
 	    	calcUpdate.calculateWiFiPostitions();
+	    }
+	    else if (e.getSource() == mds)
+	    {
+	    	emuData.setRealView(GridViewType.MDS);
+	    	calcButton.setEnabled(true);
+	    	realButton.setEnabled(true);
+	    	mds.setEnabled(false);
+	    	mdsUpdate.update();
 	    }
     }
 	/* (non-Javadoc)

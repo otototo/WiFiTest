@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 
@@ -44,6 +45,8 @@ public class GridPanel
 	private MouseAdapter mouseHandler = null;
 	private WiFiSignalUpdate wifiSignalUpdate;
 	
+	private Vector<MDSPoint> mds;
+	
 	private int currentColumnCount;
 	private int currentRowCount;
 	
@@ -55,6 +58,7 @@ public class GridPanel
 	    super();
 	    initEmuData(emuData);
 	    wifiSignalUpdate = new WiFiSignalUpdate(emuData);
+	    mds = new Vector<MDSPoint>();
 //	    setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 	    setBackground(Color.WHITE);
     }
@@ -102,7 +106,7 @@ public class GridPanel
 	 */
     protected void removeDevice(Device device)
     {
-    	device.setDeviceType(DeviceType.WIFI_STATION);
+    	device.setDeviceType(DeviceType.WIFI_REAL);
     	int index = getEmuData().getWiFiStationRealIndex(device);
     	if (index != -1)
     	{
@@ -124,9 +128,9 @@ public class GridPanel
 	 */
     protected void addWiFiStation(Device device)
     {
-    	if (addImageOntoCell(GridCellType.WIFI_REAL.getImage(), device) != CELL_TAKEN)
+    	if (addImageOntoCell(DeviceType.WIFI_REAL.getImage(), device) != CELL_TAKEN)
     	{
-        	device.setDeviceType(DeviceType.WIFI_STATION);
+        	device.setDeviceType(DeviceType.WIFI_REAL);
         	getEmuData().addWiFiStationReal(device, true);
         	wifiSignalUpdate.update(device);
         	
@@ -138,7 +142,7 @@ public class GridPanel
 	 */
     protected void addMobileDevice(Device device)
     {
-    	if (addImageOntoCell(GridCellType.PERSON.getImage(), device) != CELL_TAKEN)
+    	if (addImageOntoCell(DeviceType.MOBILE.getImage(), device) != CELL_TAKEN)
     	{
         	device.setDeviceType(DeviceType.MOBILE);
         	getEmuData().addMobileDevice(device, true);	
@@ -193,22 +197,38 @@ public class GridPanel
     protected void paintComponent(Graphics g) 
 	{    			
        super.paintComponent(g);
-       drawGrid(g);  
+	   Graphics2D g2d = (Graphics2D) g.create();
+       drawGrid(g2d);  
+       drawweirdstuff(g2d);
+       g2d.dispose();
     }
     
     /**
+	 * 
+	 */
+    private void drawweirdstuff(Graphics2D g2d)
+    {
+	    for (MDSPoint p : mds)
+	    {
+	    	g2d.setColor(Color.MAGENTA);
+	    	int w = 10, h = 10;
+	    	g2d.fillRect(p.getPoint().x, p.getPoint().y, w, h);
+	    	int length = g2d.getFontMetrics().charsWidth((p.getID()+"").toCharArray(), 0, (p.getID()+"").length());
+        	g2d.drawString(p.getID()+"", p.getPoint().x+w-length, p.getPoint().y+h);
+	    }
+    }
+	/**
 	 * http://stackoverflow.com/questions/15421708/how-to-draw-grid-using-swing-class-java-and-detect-mouse-position-when-click-and
 	 */
-    private void drawGrid(Graphics g)
+    private void drawGrid(Graphics2D g2d)
     {
-	    Graphics2D g2d = (Graphics2D) g.create();
 
         if (grid.isEmpty())
         {
             initGrid(g2d);
         }
         drawCells(g2d);         
-        g2d.dispose();
+//        g2d.dispose();
     }
 
     /**
@@ -248,8 +268,9 @@ public class GridPanel
         g2d.setColor(Color.BLACK);
         for (GridCell cell : grid) 
         {
-        	if (emuData.isView(GridViewType.Reality) && 
-        			(cell.getCellType() != GridCellType.WIFI_CALC)
+        	if (emuData.isView(GridViewType.Reality) 
+//        			&& 
+//        			(cell.getCellType() != GridCellType.WIFI_CALC)
         		)
         	{
            	 	cell.draw(g2d);
@@ -350,7 +371,7 @@ public class GridPanel
     	System.out.println("mouseClicked.realView:"+emuData.isView(GridViewType.Reality));
     	if (emuData.isView(GridViewType.Reality))
     	{
-        	Device device = new Device(DeviceType.WIFI_STATION, 
+        	Device device = new Device(DeviceType.WIFI_REAL, 
         			selectedCell.x, selectedCell.y);
             if (e.getButton() == MouseEvent.BUTTON1)
             {
@@ -442,5 +463,53 @@ public class GridPanel
     public void setCurrentRowCount(int currentRowCount)
     {
 	    this.currentRowCount = currentRowCount;
+    }
+	/**
+	 * @param all
+	 * @param scale
+	 */
+    public void fillMDS(List<Device> all, double[][] scale)
+    {
+    	System.out.println("GridPanel.fillMDS()+");
+	    //negative values
+    	double maxnx = 0, maxny = 0;
+	    
+	    for (int i = 0; i < scale[0].length; i++)
+	    {
+	    	if (scale[0][i] < maxnx)
+	    		maxnx = scale[0][i];
+	    	if (scale[1][i] < maxny)
+	    		maxny = scale[1][i];
+	    }
+	    maxnx = -maxnx;
+	    maxny = -maxny;
+	    
+	    int x, y;
+	    double cellWidth = grid.get(0).getWidth();
+	    double cellHeight = grid.get(0).getHeight();
+	    
+	    mds.clear();
+	    for (int i = 0; i < scale[0].length; i++)
+	    {
+    	    x = (int) ((scale[0][i] + maxnx) * cellWidth);
+    	    y = (int) ((scale[1][i] + maxny) * cellHeight);	
+    	    System.out.println("x="+x+" y="+y + " id="+all.get(i).getId());
+    	    mds.add(new MDSPoint(x, y, all.get(i).getId()));
+	    }
+	    repaint();
+	    System.out.println("GridPanel.fillMDS()-");
+    }
+    
+    /**
+     * 
+     */
+    private void addMDSOntoCell(int x, int y, Device device)
+    {
+    	System.out.println("GridPanel.addMDSOntoCell()+");
+    	System.out.println("x="+x+" y="+y);
+    	int index = x + (y * getCurrentColumnCount());
+    	GridCell cell = getGridCell(index);
+		cell.setMDS(device);
+		System.out.println("GridPanel.addMDSOntoCell()-");
     }
 }

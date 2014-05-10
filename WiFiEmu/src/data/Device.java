@@ -223,7 +223,7 @@ public class Device
 	/**
 	 * @return the signalStrength
 	 */
-    public double getSignalStrength(int wifiId)
+    public Double getSignalStrength(int wifiId)
     {
 	    return signalStrengthTable.get(wifiId);
     }
