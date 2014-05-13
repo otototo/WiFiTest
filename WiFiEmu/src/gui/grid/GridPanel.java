@@ -379,20 +379,23 @@ public class GridPanel
     	System.out.println("mouseClicked.realView:"+emuData.isView(GridViewType.Reality));
     	if (emuData.isView(GridViewType.Reality))
     	{
-        	Device device = new Device(DeviceType.WIFI_REAL, 
-        			selectedCell.x, selectedCell.y);
-            if (e.getButton() == MouseEvent.BUTTON1)
-            {
-            	addMobileDevice(device);
-            }
-            else if (e.getButton() == MouseEvent.BUTTON3)
-            {
-            	addWiFiStation(device);
-            }
-            else if (e.getButton() == MouseEvent.BUTTON2)
-            {
-            	removeDevice(device);            //does not work     	
-            }
+    		if (selectedCell != null)
+    		{
+            	Device device = new Device(DeviceType.WIFI_REAL, 
+            			selectedCell.x, selectedCell.y);
+                if (e.getButton() == MouseEvent.BUTTON1)
+                {
+                	addMobileDevice(device);
+                }
+                else if (e.getButton() == MouseEvent.BUTTON3)
+                {
+                	addWiFiStation(device);
+                }
+                else if (e.getButton() == MouseEvent.BUTTON2)
+                {
+                	removeDevice(device);            //does not work     	
+                }
+    		}
     	}
     }
     
@@ -507,17 +510,5 @@ public class GridPanel
 	    repaint();
 	    System.out.println("GridPanel.fillMDS()-");
     }
-    
-    /**
-     * 
-     */
-    private void addMDSOntoCell(int x, int y, Device device)
-    {
-    	System.out.println("GridPanel.addMDSOntoCell()+");
-    	System.out.println("x="+x+" y="+y);
-    	int index = x + (y * getCurrentColumnCount());
-    	GridCell cell = getGridCell(index);
-		cell.setMDS(device);
-		System.out.println("GridPanel.addMDSOntoCell()-");
-    }
+ 
 }

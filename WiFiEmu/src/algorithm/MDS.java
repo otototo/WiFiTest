@@ -3,11 +3,7 @@
  */
 package algorithm;
 
-import java.util.List;
-
 import mdsj.MDSJ;
-import data.Device;
-import data.EmuData;
 
 /**
  * @author paulina

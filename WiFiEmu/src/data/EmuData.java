@@ -23,6 +23,7 @@ public class EmuData
 	// 1 langelis = 1 metras
 	public static final int DEFAULT_SIGNAL_DECREASE_PER_CELL = 1;
 	public static final int DEFAULT_MAX_GRID_COUNT = 30;
+	public static final int DEFAULT_MAX_SIGNAL_FREQUENCY = 2400;
 	
 	private int gridRowCount;
 	private int gridColumnCount;

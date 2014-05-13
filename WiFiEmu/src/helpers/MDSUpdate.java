@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import algorithm.MDS;
+import algorithm.SignalCalc;
 import data.Device;
 import data.EmuData;
 
@@ -20,7 +21,7 @@ import data.EmuData;
 public class MDSUpdate
 {
 	/** default value for non-existant signal*/
-	private static final double DEFAULT_NE_SIGNAL = 4;
+	private static final double DEFAULT_NE_SIGNAL = 5;
 	private EmuData emuData;
 	private MDS mds;
 	private GridPanel gridPanel;
@@ -73,8 +74,8 @@ public class MDSUpdate
 	    			temp = all.get(j).getSignalStrength(all.get(i).getId());
 		    		if (temp != null)
 		    		{
-		    			input[i][j] = temp;
-		    			input[j][i] = temp;
+		    			input[i][j] = signalToDistance(temp);
+		    			input[j][i] = signalToDistance(temp);
 		    		}
 	    		}
 	    	}
@@ -91,5 +92,14 @@ public class MDSUpdate
     	
     	gridPanel.fillMDS(all, mds.scale(input));
     	System.out.println("MDSUpdate.update()-");
+    }
+
+	/**
+	 * @param signal
+	 * @return
+	 */
+    private double signalToDistance(Double signal)
+    {
+	    return SignalCalc.getDistanceBySignal(signal, EmuData.DEFAULT_MAX_SIGNAL_FREQUENCY);
     }
 }

@@ -8,6 +8,7 @@ import gui.grid.GridPanel;
 import java.util.ArrayList;
 import java.util.List;
 
+import algorithm.SignalCalc;
 import algorithm.WiFiPositionCalc;
 import data.Device;
 import data.EmuData;
@@ -49,7 +50,8 @@ public class WiFiCalcUpdate
 	    Device wifical;
 	    
 	    double[][] coord;
-	    double [] strength;
+	    double strength;
+	    double[] distance;
 	   
 	    int wifiId;
 		Device wifi;
@@ -60,16 +62,17 @@ public class WiFiCalcUpdate
 	    	wifi = wifis.get(i);
 	    	wifiId = wifi.getId();
 	    	coord = new double[allMobiles.size()][2];
-	    	strength = new double[allMobiles.size()];
+	    	distance = new double[allMobiles.size()];
 	    	
 	    	for (int j = 0; j < allMobiles.size(); j++)
 	    	{
 	    		coord[j][0] = allMobiles.get(j).getX();
 	    		coord[j][1] = allMobiles.get(j).getY();
-	    		strength[j] = allMobiles.get(j).getSignalStrength(wifiId);
+	    		strength = allMobiles.get(j).getSignalStrength(wifiId);
+	    		distance[j] = signalToDistance(strength);
 	    	}
 	    	
-	    	ret = calculateWiFiPosition.calculate(coord, strength);
+	    	ret = calculateWiFiPosition.calculate(coord, distance);
 	    	System.out.println("calculateWiFiPostitions.calculate ret="+ret);
 	    	if (ret == 1)
 	    	{
@@ -145,5 +148,8 @@ public class WiFiCalcUpdate
     {
 	    this.gridPanel = gridPanel;
     }
-
+    private double signalToDistance(Double signal)
+    {
+	    return SignalCalc.getDistanceBySignal(signal, EmuData.DEFAULT_MAX_SIGNAL_FREQUENCY);
+    }
 }

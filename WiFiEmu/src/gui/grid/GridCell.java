@@ -15,8 +15,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import algorithm.SignalCalc;
 import data.Device;
 import data.DeviceType;
+import data.EmuData;
 
 /**
  * @author paulina
@@ -29,7 +31,6 @@ public class GridCell extends Rectangle
 	private Image image;
 	private Device device;
 	private Device prediction;
-	private Device mds;
 
 	/**
 	 * @param i
@@ -112,45 +113,30 @@ public class GridCell extends Rectangle
     		drawEmpty(g2d);
     }
     private void drawImage(Graphics2D g2d)
-    {    	
-    	if (mds != null)
+    {    
+    	g2d.setColor(Color.BLACK);
+		drawEmpty(g2d);
+    	g2d.drawImage(getImage(), x+2, y+2, 
+				width-2, height-2, null);    	
+		getImage().flush();	    
+		
+		if (getDevice().getDeviceType() == DeviceType.MOBILE)
+		{
+			
+			for (java.lang.Double val : device.getSignalStrengthTable().values())
+			{
+				val = SignalCalc.getDistanceBySignal(val, EmuData.DEFAULT_MAX_SIGNAL_FREQUENCY);
+				Shape theCircle = new Ellipse2D.Double(x - width * val + width/2, y - height * val + height/2, 2.0 * width* val, 2.0 * height * val);
+			    g2d.draw(theCircle);
+			}
+		}
+    	
+		g2d.setColor(Color.MAGENTA);
+    	g2d.drawString(device.getId()+"", x, y+height);
+    	if (prediction != null)
     	{
-    		System.out.println("GridCell.drawImage() mds+");
-        	g2d.setColor(Color.BLACK);
-        	g2d.drawImage(mds.getDeviceType().getImage(), x+2, y+2, 
-    				width-2, height-2, null);    	
-    		getImage().flush();	    
-        	
-    		g2d.setColor(Color.MAGENTA);
-    		int length = g2d.getFontMetrics().charsWidth((mds.getId()+"").toCharArray(), 0, (mds.getId()+"").length());
-        	g2d.drawString(mds.getId()+"", x+width-length, y+height);
-        	System.out.println("GridCell.drawImage() mds-");
-    	}
-    	else
-    	{
-        	g2d.setColor(Color.BLACK);
-    		drawEmpty(g2d);
-        	g2d.drawImage(getImage(), x+2, y+2, 
-    				width-2, height-2, null);    	
-    		getImage().flush();	    
-    		
-    		if (getDevice().getDeviceType() == DeviceType.MOBILE)
-    		{
-    			
-    			for (java.lang.Double val : device.getSignalStrengthTable().values())
-    			{
-    				Shape theCircle = new Ellipse2D.Double(x - width * val + width/2, y - height * val + height/2, 2.0 * width* val, 2.0 * height * val);
-    			    g2d.draw(theCircle);
-    			}
-    		}
-        	
-    		g2d.setColor(Color.MAGENTA);
-        	g2d.drawString(device.getId()+"", x, y+height);
-        	if (prediction != null)
-        	{
-        		int length = g2d.getFontMetrics().charsWidth((prediction.getId()+"").toCharArray(), 0, (prediction.getId()+"").length());
-            	g2d.drawString(prediction.getId()+"", x+width-length, y+height);
-        	}
+    		int length = g2d.getFontMetrics().charsWidth((prediction.getId()+"").toCharArray(), 0, (prediction.getId()+"").length());
+        	g2d.drawString(prediction.getId()+"", x+width-length, y+height);
     	}
     }
 
@@ -177,16 +163,5 @@ public class GridCell extends Rectangle
     {
 	    this.prediction = device;
     }
-    public void setMDS(Device mds)
-    {
-	    this.mds = mds;
-    }
-	/**
-	 * @return
-	 */
-    public Device getMDS()
-    {
-	    // TODO Auto-generated method stub
-	    return this.mds;
-    }
+
 }
