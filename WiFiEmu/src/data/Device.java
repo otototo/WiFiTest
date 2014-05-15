@@ -16,6 +16,7 @@ public class Device
 	private ArrayList<Double> x;
 	private ArrayList<Double> y;
 	private int id;
+	private int signalFrequency;
 	private Hashtable<Integer, Double> signalStrengthTable;
 
 	private boolean isSelected = false;
@@ -28,7 +29,18 @@ public class Device
 	 * @param x 
      * 
      */
+
     public Device(DeviceType deviceType, double x, double y)
+    {
+	   this(deviceType, EmuData.DEFAULT_MAX_SIGNAL_FREQUENCY, x, y);
+    }
+    
+    public Device(DeviceType deviceType, double x, double y, int id)
+    {
+	    this(deviceType, EmuData.DEFAULT_MAX_SIGNAL_FREQUENCY, x, y, id);
+    }
+    
+    public Device(DeviceType deviceType, int frequency, double x, double y)
     {
 	    this.setDeviceType(deviceType);
 	    signalStrengthTable = new Hashtable<>();
@@ -38,18 +50,20 @@ public class Device
 	    addX(x);
 	    addY(y);
 	    setId(++count);
+	    setSignalFrequency(frequency);
     }
     
-    public Device(DeviceType deviceType, double x2, double y2, int id)
+    public Device(DeviceType deviceType, int frequency, double x, double y, int id)
     {
 	    this.setDeviceType(deviceType);
 	    signalStrengthTable = new Hashtable<>();
 	    
 	    this.x = new ArrayList<Double>();
 	    this.y = new ArrayList<Double>();
-	    addX(x2);
-	    addY(y2);
+	    addX(x);
+	    addY(y);
 	    setId(id);
+	    setSignalFrequency(frequency);
     }
 
 	/**
@@ -190,7 +204,6 @@ public class Device
     @Override
     public String toString()
     {
-        // TODO Auto-generated method stub
         return getX()+"x"+getY()+"x"+getId();
     }
 /*
@@ -287,5 +300,21 @@ public class Device
     public static void resetCount()
     {
     	count = 0;
+    }
+
+	/**
+	 * @return the signalFrequency
+	 */
+    public int getSignalFrequency()
+    {
+	    return signalFrequency;
+    }
+
+	/**
+	 * @param signalFrequency the signalFrequency to set
+	 */
+    public void setSignalFrequency(int signalFrequency)
+    {
+	    this.signalFrequency = signalFrequency;
     }
 }

@@ -207,6 +207,13 @@ public class EmuData
     	if (notify)
     		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
     }
+    
+    public void removeMobile(Device mobile, boolean notify)
+    {
+    	getMobileDevices().remove(mobile);
+    	if (notify)
+    		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
+    }
 
 	/**
 	 * @return the wiFiStationsCalculated
@@ -291,24 +298,11 @@ public class EmuData
     	return index;
     }
 
-    public int RemoveWiFiStation(Device station, boolean notify)
+    public void removeWiFiStation(Device station, boolean notify)
     {
-    	int index = -1;
-    	Device device;
-    	for (int i = 0; i < wiFiStationsReal.size(); i++)
-    	{
-    		device = wiFiStationsReal.get(i);
-    		if (device.equals(station) && 
-  				(DeviceType.WIFI_REAL == station.getDeviceType()))
-			{
-    			index = i;
-    			break;
-			}
-    	}
-
+    	getWiFiStationsReal().remove(station);
     	if (notify)
-    		notifier.notifyListeners(true, ChangeIdentifier.WIFIR);
-    	return index;
+    		notifier.notifyListeners(true, ChangeIdentifier.MOBILE);
     }
 
 

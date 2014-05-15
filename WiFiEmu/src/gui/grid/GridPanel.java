@@ -17,9 +17,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import data.Device;
@@ -105,31 +108,31 @@ public class GridPanel
 	/**
 	 * @param device
 	 */
-    protected void removeDevice(Device device)
+    protected void removeDevice(double x, double y)
     {
-    	device.setDeviceType(DeviceType.WIFI_REAL);
-    	int index = getEmuData().getWiFiStationRealIndex(device);
-    	if (index != -1)
+    	int index = selectedCell.x + 
+    			(selectedCell.y * getCurrentColumnCount());
+    	GridCell cell = getGridCell(index);
+    	Device device = cell.getDevice();
+    	if (device.getDeviceType() == DeviceType.WIFI_REAL)
     	{
-        	getEmuData().removeWiFiStation(index, true);
+    		if (getEmuData().getWiFiStationsReal().contains(device))
+    			getEmuData().removeWiFiStation(device, true);
     	}
-    	else
+    	else if (device.getDeviceType() == DeviceType.MOBILE);
     	{
-        	device.setDeviceType(DeviceType.MOBILE);
-    		index = getEmuData().getMobileDeviceIndex(device);
-    		if (index != -1)
-    		{
-            	getEmuData().removeMobile(index, true);
-    		}
+    		if (getEmuData().getMobileDevices().contains(device))
+    			getEmuData().removeMobile(index, true);
         }
     	
     }
 	/**
 	 * @param device
 	 */
-    protected void addWiFiStation(Device device)
+    protected void addWiFiStation(double x, double y)
     {
-    	if (addImageOntoCell(DeviceType.WIFI_REAL.getImage(), device) != CELL_TAKEN)
+    	Device device = addImageOntoCell(DeviceType.WIFI_REAL.getImage(), x, y);
+    	if (device != null)
     	{
         	device.setDeviceType(DeviceType.WIFI_REAL);
         	getEmuData().addWiFiStationReal(device, true);
@@ -137,19 +140,54 @@ public class GridPanel
         	
 //        	repaint();
     	}
+    	else
+    	{
+    		int index = selectedCell.x + 
+        			(selectedCell.y * getCurrentColumnCount());
+        	GridCell cell = getGridCell(index);
+        	Device wifi = cell.getDevice();
+        	String frequencyChange = JOptionPane.showInputDialog("Enter new frequency");
+        	try
+            {
+	            System.out.println("frequencyChange="+frequencyChange);
+	            wifi.setSignalFrequency(Integer.parseInt(frequencyChange));
+	        	wifiSignalUpdate.update(wifi);
+            } catch (Exception e)
+            {
+	            System.err.println(e.getMessage());
+            }
+    	}
     }
 	/**
 	 * @param device
 	 */
-    protected void addMobileDevice(Device device)
+    protected void addMobileDevice(double x, double y)
     {
-    	if (addImageOntoCell(DeviceType.MOBILE.getImage(), device) != CELL_TAKEN)
+    	Device device = addImageOntoCell(DeviceType.MOBILE.getImage(), x, y);
+    	if (device != null)
     	{
         	device.setDeviceType(DeviceType.MOBILE);
         	getEmuData().addMobileDevice(device, true);	
         	wifiSignalUpdate.update(device);
         	
 //        	repaint();
+    	}
+    	else
+    	{
+    		int index = selectedCell.x + 
+        			(selectedCell.y * getCurrentColumnCount());
+        	GridCell cell = getGridCell(index);
+        	Device mobile = cell.getDevice();
+        	String msg = "ID="+mobile.getId();
+        	
+        	Enumeration<Integer> it = mobile.getSignalStrengthTable().keys();
+        	while (it.hasMoreElements())
+        	{
+        		int next = it.nextElement();
+        		msg += "\n"+next+" = "+mobile.getSignalStrength(next);
+        	}
+        	
+        	JOptionPane.showConfirmDialog(this, msg);
     	}
     }
     public void addPrediction(Device device, int x, int y)
@@ -163,19 +201,20 @@ public class GridPanel
 	 * @param string
 	 * @param device - device with wich to link
 	 */
-    public int addImageOntoCell(Image image, Device device)
+    public Device addImageOntoCell(Image image, double x, double y)
     {
-    	int ret = CELL_TAKEN;
+    	Device device = null;
     	int index = selectedCell.x + 
     			(selectedCell.y * getCurrentColumnCount());
     	GridCell cell = getGridCell(index);
     	if ((cell != null) && (cell.getImage() == null))
     	{
     		cell.setImage(image);
+    		device = new Device(DeviceType.MOBILE, 
+        			selectedCell.x, selectedCell.y);
     		cell.setDevice(device);
-    		ret = SUCCESS;
     	}
-    	return ret;
+    	return device;
     }
 	/**
 	 * @return
@@ -381,19 +420,19 @@ public class GridPanel
     	{
     		if (selectedCell != null)
     		{
-            	Device device = new Device(DeviceType.WIFI_REAL, 
-            			selectedCell.x, selectedCell.y);
+            	/*Device device = new Device(DeviceType.WIFI_REAL, 
+            			selectedCell.x, selectedCell.y);*/
                 if (e.getButton() == MouseEvent.BUTTON1)
                 {
-                	addMobileDevice(device);
+                	addMobileDevice(selectedCell.x, selectedCell.y);
                 }
                 else if (e.getButton() == MouseEvent.BUTTON3)
                 {
-                	addWiFiStation(device);
+                	addWiFiStation(selectedCell.x, selectedCell.y);
                 }
                 else if (e.getButton() == MouseEvent.BUTTON2)
                 {
-                	removeDevice(device);            //does not work     	
+                	removeDevice(selectedCell.x, selectedCell.y);            //does not work     	
                 }
     		}
     	}
