@@ -29,12 +29,12 @@ public class MainFrame
      */
     public MainFrame()
     {    	
-        try {
+    /*    try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) 
         {
         	ex.printStackTrace();
-        }
+        }*/
         EmuDataNotifier notifier = new EmuDataNotifier();
         EmuData emuData = new EmuData(notifier);
         mainPanel = new MainPanel(emuData, notifier);

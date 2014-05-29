@@ -63,6 +63,7 @@ public class Device
 	    addX(x);
 	    addY(y);
 	    setId(id);
+	    count++;
 	    setSignalFrequency(frequency);
     }
 
@@ -204,7 +205,9 @@ public class Device
     @Override
     public String toString()
     {
-        return getX()+"x"+getY()+"x"+getId();
+    	String string = getX()+"x"+getY()+"x"+getId()+"x"+getSignalFrequency();
+    	
+        return string;
     }
 /*
 	*//**

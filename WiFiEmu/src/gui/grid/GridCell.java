@@ -119,7 +119,7 @@ public class GridCell extends Rectangle
     	g2d.drawImage(getImage(), x+2, y+2, 
 				width-2, height-2, null);    	
 		getImage().flush();	    
-		
+	/*	
 		if (getDevice().getDeviceType() == DeviceType.MOBILE)
 		{
 			
@@ -129,7 +129,7 @@ public class GridCell extends Rectangle
 				Shape theCircle = new Ellipse2D.Double(x - width * val + width/2, y - height * val + height/2, 2.0 * width* val, 2.0 * height * val);
 			    g2d.draw(theCircle);
 			}
-		}
+		}*/
     	
 		g2d.setColor(Color.MAGENTA);
     	g2d.drawString(device.getId()+"", x, y+height);

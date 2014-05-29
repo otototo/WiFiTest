@@ -28,6 +28,7 @@ public class WiFiPositionCalc
     	sy = -1;
     }
 	
+    /** http://justbasic.wikispaces.com/Check+for+collision+of+two+circles,+get+intersection+points */
 	private int circleIntersect(double x0, double y0, double r0, double x1, double y1, double r1)
 	{
 	    /* This function checks for the intersection of two circles.

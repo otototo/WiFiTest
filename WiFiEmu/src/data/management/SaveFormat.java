@@ -11,21 +11,27 @@ public enum SaveFormat
 {	
 	/** Height and Width of grid*/
 	SIZE("SIZE"), 
+	HEIGHT("HEIGHT"),
+	WIDTH("WIDTH"),
 	
 	/** Decrease of signal strength per cell*/
-	DECREASE_PER_CELL("DECR"),
+	DECREASE_PER_CELL("DECREASE_PER_CELL"),
 	
 	/** Positions of placed WiFi stations*/
-	WIFI_REAL("WIFIR"),
+	WIFI("WIFI"),
 	
 	/** Positions of calculated WiFi stations*/
-	WIFI_CALC("WIFIC"),
+	WIFI_CALC("WIFI_CACLCULATED"),
 	
 	/** Maximum signal strength of WiFi station*/
-	SIGNAL_STRENGTH("MAX"),
+	SIGNAL_FREQUENCY("SIGNAL_FREQUENCY"),
 	
 	/** Positions of placed mobile devices*/
-	MOBILE("MOBILE");
+	MOBILE("MOBILE"),
+	
+	X("X"),
+	Y("Y"), ID("ID"), SIGNAL_STRENGTHS("SIGNAL_STRENGTHS"), 
+	SIGNAL_STRENGTH("SIGNAL_STRENGTH"), VALUE("VALUE"), COORD("COORD"), MOBILES("MOBILES"), WIFIS("WIFIS");
 	
 	private String value;
 //	private String description;

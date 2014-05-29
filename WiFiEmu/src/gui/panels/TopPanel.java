@@ -19,8 +19,8 @@ import data.EmuData;
 
 public class TopPanel extends JPanel implements ActionListener, EmuDataListener
 {
-	private JButton realButton = new JButton("Reality");
-	private JButton calcButton = new JButton("Calculated");
+	private JButton realButton = new JButton("Grid View");
+	private JButton calcButton = new JButton("Trilateration");
 	private JButton mds = new JButton("MDS");
 	
 	private EmuData emuData;
