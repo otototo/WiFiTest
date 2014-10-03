@@ -137,8 +137,8 @@ public class MDSUpdate
 	    		distReal = Distance.getDistance(all.get(i).getX(), all.get(i).getY(), 
 	    				all.get(j).getX(), all.get(j).getY());
 //			    System.out.println("distReal="+distReal);
-	    		distMds = Distance.getDistance(ds[i][0], ds[i][1], 
-	    				ds[j][0], ds[j][1]);
+	    		distMds = Distance.getDistance(ds[0][i], ds[1][i], 
+	    				ds[0][j], ds[1][j]);
 //			    System.out.println("distMds="+distMds);
 			    if (distReal != 0)
 			    {
